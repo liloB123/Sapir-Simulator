@@ -10,7 +10,7 @@ const URLResponse: React.FC = () => {
   useEffect(() => {
     const getData = async () => {
       try {
-        const result = await fetchData('/');
+        const result = await fetchData('');
         setData(result);
       } catch (err) {
         setError('Failed to fetch data');
