@@ -1,0 +1,27 @@
+version: '3.9'
+
+services:
+  frontend:
+    build:
+      context: ./client-side
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./client-side:/app
+      - /app/node_modules
+    environment:
+      - VITE_BACKEND_URL=http://localhost:8000
+    command: npm run dev -- --host
+    depends_on:
+      - backend
+
+  backend:
+    build:
+      context: ./server-side
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./server-side:/app
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
