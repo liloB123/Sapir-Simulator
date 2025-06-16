@@ -1,13 +1,11 @@
-version: '3.9'
-
 services:
   frontend:
     build:
-      context: ./client-side
+      context: ./frontend
     ports:
       - "5173:5173"
     volumes:
-      - ./client-side:/app
+      - ./frontend:/app
       - /app/node_modules
     environment:
       - VITE_BACKEND_URL=http://localhost:8000
@@ -17,11 +15,11 @@ services:
 
   backend:
     build:
-      context: ./server-side
+      context: ./backend
     ports:
       - "8000:8000"
     volumes:
-      - ./server-side:/app
+      - ./backend:/app
     environment:
       - PYTHONUNBUFFERED=1
     command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
