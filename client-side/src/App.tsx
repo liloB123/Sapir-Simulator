@@ -1,23 +1,10 @@
-import { useEffect, useState } from "react";
+import React from 'react';
+import URLResponse from './components/urlResponse';
 
-
-function App() {
-  const [message, setMessage] = useState("Loading...");
-
-  useEffect(() => {
-    fetch("http://localhost:8000")
-      .then((res) => res.json())
-      .then((data) => {console.log(data);
-                       setMessage(data.Hello);})
-      .catch((err) => setMessage("Failed to fetch: " + err.message));
-  }, []);
-  
-
+const App: React.FC = () => {
   return (
-    <div style={{ padding: "2rem", fontSize: "1.5rem" }}>
-      <p>{message}</p>
-    </div>
+    <URLResponse/>
   );
-}
+};
 
-export default App
+export default App;
