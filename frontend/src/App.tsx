@@ -1,9 +1,20 @@
 import React from 'react';
-import URLResponse from './components/urlResponse';
+import { LayerProvider, type LayerState } from './contexts/LayersMenuContext';
+import MapContainer from './components/MapContainer';
 
 const App: React.FC = () => {
+  const initialLayers: LayerState = {
+    "מרחק מקו הגבול": false,
+    "מרחק מיישובים מרכזיים": false,
+    "פוליגונים בשטח ישראלי": false,
+    "פוליגונים חוצי גבולות": false,
+    "נקודות אסטרטגיות": false
+  };
+
   return (
-    <URLResponse/>
+    <LayerProvider initialLayers={initialLayers}>
+      <MapContainer />
+    </LayerProvider>
   );
 };
 
