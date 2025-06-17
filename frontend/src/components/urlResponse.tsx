@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState } from 'react';
 
 import { fetchRootMessage } from '../api';
@@ -26,8 +27,8 @@ const URLResponse: React.FC = () => {
     <div className='flex flex-col items-center gap-10'>
       <h1 className="text-[rgb(82,139,160)] text-2xl font-semibold">Data from Backend</h1>
       {loading ? (<p>Loading...</p>) :
-       error ? (<p className="text-red-500">{error}</p>) :
-       (<p className="text-[rgb(156,217,65)]">{data}</p>)}
+        error ? (<p className="text-red-500">{error}</p>) :
+          (<p className="text-[rgb(156,217,65)]">{data}</p>)}
     </div>
   );
 };
