@@ -25,11 +25,11 @@ const BaseMap: React.FC = () => {
         </Map>
       </div>
       <div className="fixed top-4 left-4 z-20 bg-white bg-opacity-90 p-4 rounded shadow-md max-w-xs">
-        <h4 className="font-semibold mb-2">:שכבות שנבחרו</h4>
-        <div className="text-sm space-y-1">
+        <h4 className="font-semibold mb-2 text-right">:שכבות שנבחרו</h4>
+        <div className="text-sm space-y-1 text-right">
           {Object.entries(layers).map(([key, value]) => (
             <div key={key} className={value ? 'text-green-600' : 'text-red-600'}>
-              {key}: {value ? 'ON' : 'OFF'}
+              {value ? 'ON' : 'OFF'}: {key}
             </div>
           ))}
         </div>
