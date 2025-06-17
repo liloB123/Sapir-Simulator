@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { fetchDataFromRoot } from '../api';
+import { fetchRootMessage } from '../api';
 
 const URLResponse: React.FC = () => {
   const [data, setData] = useState<string>();
@@ -10,7 +10,7 @@ const URLResponse: React.FC = () => {
   useEffect(() => {
     const getData = async () => {
       try {
-        const result = await fetchDataFromRoot('');
+        const result = await fetchRootMessage();
         setData(result);
       } catch (error) {
         setError('Failed to fetch data');
