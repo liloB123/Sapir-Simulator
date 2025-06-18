@@ -1,73 +1,124 @@
-import {
-  bbox,
-  booleanPointInPolygon,
-  pointGrid,
-  polygon,
-  distance,
-  point,
-} from "@turf/turf";
+import type { FeatureCollection } from "geojson";
 import React from "react";
-import Map, { Layer, Source } from "react-map-gl/maplibre";
+import Map, { Layer, Source, type LayerProps } from "react-map-gl/maplibre";
 
-// נניח שיש לנו פוליגון (ריבוע סביב תל אביב)
-const poly = polygon([
-  [
-    [34.77, 32.07],
-    [34.81, 32.07],
-    [34.81, 32.11],
-    [34.77, 32.11],
-    [34.77, 32.07],
-  ],
-]);
-
-const grid = pointGrid(bbox(poly), 0.1, { units: "kilometers" });
-const filtered = grid.features.filter((pt) => booleanPointInPolygon(pt, poly));
-const origin = point([34.79, 32.09]);
-
-const features = filtered.map((pt) => {
-  return {
-    ...pt,
-    properties: {
-      ...pt.properties,
-      dist: distance(origin, pt, { units: "kilometers" }),
+const parks: FeatureCollection = {
+  type: "FeatureCollection",
+  features: [
+    {
+      type: "Feature",
+      properties: { name: "Tel Aviv" },
+      geometry: {
+        type: "Point",
+        coordinates: [34.7818, 32.0853],
+      },
     },
-  };
-});
+    {
+      type: "Feature",
+      properties: { name: "Jerusalem" },
+      geometry: {
+        type: "Point",
+        coordinates: [35.2137, 31.7683],
+      },
+    },
+    {
+      type: "Feature",
+      properties: { name: "Haifa" },
+      geometry: {
+        type: "Point",
+        coordinates: [34.9896, 32.794],
+      },
+    },
+  ],
+};
+
+const parksLayer: LayerProps = {
+  id: "parksLayer",
+  type: "circle",
+  paint: {
+    "circle-radius": 10,
+    "circle-color": "#FF0000",
+  },
+};
+
+const trails: FeatureCollection = {
+  type: "FeatureCollection",
+  features: [
+    {
+      type: "Feature",
+      properties: { name: "Trail A" },
+      geometry: {
+        type: "LineString",
+        coordinates: [
+          [34.9, 32.086],
+          [34.7, 32.187],
+        ],
+      },
+    },
+    {
+      type: "Feature",
+      properties: { name: "Trail B" },
+      geometry: {
+        type: "LineString",
+        coordinates: [
+          [35.3137, 31.7683],
+          [35.3145, 31.969],
+        ],
+      },
+    },
+    {
+      type: "Feature",
+      properties: { name: "Trail C" },
+      geometry: {
+        type: "LineString",
+        coordinates: [
+          [34.8, 32.794],
+          [34.7, 32.996],
+        ],
+      },
+    },
+  ],
+};
+
+const trailsLayer: LayerProps = {
+  id: "trailsLayer",
+  type: "line",
+  paint: {
+    "line-color": "#00FF00",
+    "line-width": 4,
+  },
+};
+
+const neighborhoods: FeatureCollection = {
+  type: "FeatureCollection",
+  features: [
+    {
+      type: "Feature",
+      properties: { name: "Neighborhood A" },
+      geometry: {
+        type: "Polygon",
+        coordinates: [
+          [
+            [34.9, 32.3],
+            [34.9, 32.11],
+            [34.81, 32.11],
+          ],
+        ],
+      },
+    },
+  ],
+};
+
+const neighborhoodsLayer: LayerProps = {
+  id: "neighborhoodsLayer",
+  type: "fill",
+  paint: {
+    "fill-opacity": 1,
+    "fill-color": "#0000FF",
+  },
+};
 
 const App: React.FC = () => {
-  const circleLayer = {
-    id: "circles-by-distance",
-    type: "circle",
-    source: "points",
-    paint: {
-      "circle-radius": [
-        "interpolate",
-        ["linear"],
-        ["zoom"],
-        10,
-        10, // בזום 10 → רדיוס 5 פיקסלים
-        14,
-        30, // בזום 14 → רדיוס 15 פיקסלים
-      ],
-      "circle-color": [
-        "interpolate",
-        ["linear"],
-        ["get", "dist"],
-        0,
-        "#ff0000", // אדום - 0 ק"מ
-        1,
-        "#ffa500", // כתום - 1 ק"מ
-        2,
-        "#ffff00", // צהוב - 2 ק"מ
-        5,
-        "#00ff00", // ירוק - רחוק יותר
-      ],
-      "circle-opacity": 0.5,
-    },
-  };
-
-  const data = { type: "FeatureCollection", features };
-
   return (
     <Map
       initialViewState={{
@@ -75,11 +126,17 @@ const App: React.FC = () => {
         longitude: 34.7818,
         zoom: 13,
       }}
-      style={{ width: "100%", height: "100vh" }}
+      style={{ width: "100vw", height: "100vh" }}
       mapStyle="https://demotiles.maplibre.org/style.json"
     >
-      <Source id="points" type="geojson" data={data}>
-        <Layer {...circleLayer} />
+      <Source id="parks" type="geojson" data={parks}>
+        <Layer {...parksLayer} />
+      </Source>
+      <Source id="trails" type="geojson" data={trails}>
+        <Layer {...trailsLayer} />
+      </Source>
+      <Source id="neighborhoods" type="geojson" data={neighborhoods}>
+        <Layer {...neighborhoodsLayer} />
       </Source>
     </Map>
   );
