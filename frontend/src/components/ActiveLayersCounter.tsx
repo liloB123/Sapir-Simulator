@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import type { FC } from 'react';
-import { useLayers } from "../hooks/useLayer";
+import { useLayers } from "../hooks/useLayers";
 
 const ActiveLayersCounter: FC = () => {
     const [layers, _] = useLayers();

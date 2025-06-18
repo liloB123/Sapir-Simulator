@@ -2,7 +2,7 @@
 import { useState } from "react";
 import type { FC } from 'react';
 import Map from "react-map-gl/maplibre";
-import { useLayers } from "../hooks/useLayer";
+import { useLayers } from "../hooks/useLayers";
 import type { ViewState } from 'react-map-gl/mapbox';
 
 const BaseMap: FC = () => {

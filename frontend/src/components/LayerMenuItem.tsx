@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import type { FC } from 'react';
 import { Settings2 } from "lucide-react";
-import { useLayers } from "../hooks/useLayer";
+import { useLayers } from "../hooks/useLayers";
 
 interface LayerMenuItemDetailsProps {
   name: string;
