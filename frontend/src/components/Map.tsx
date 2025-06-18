@@ -9,9 +9,9 @@ type MapProps = {
 
 export default function MapComponent({ sourcesAndLayers }: MapProps) {
   const [viewport, setViewport] = useState({
-    latitude: 40.78,
-    longitude: -73.96,
-    zoom: 13,
+    latitude: 51.5074,
+  longitude: -0.1278,
+  zoom: 12,
   });
 
   return (
