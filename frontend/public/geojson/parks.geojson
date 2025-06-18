@@ -3,18 +3,26 @@
   "features": [
     {
       "type": "Feature",
-      "properties": { "name": "Park A" },
+      "properties": {
+        "name": "Park A",
+        "area_m2": 8500,
+        "visitors": 120000
+      },
       "geometry": {
         "type": "Point",
-        "coordinates": [ -0.1276, 51.5072 ]
+        "coordinates": [-0.1276, 51.5072]
       }
     },
     {
       "type": "Feature",
-      "properties": { "name": "Park B" },
+      "properties": {
+        "name": "Park B",
+        "area_m2": 23000,
+        "visitors": 450000
+      },
       "geometry": {
         "type": "Point",
-        "coordinates": [ -0.1420, 51.5150 ]
+        "coordinates": [-0.1420, 51.5150]
       }
     }
   ]
