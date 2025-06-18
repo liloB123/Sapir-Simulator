@@ -1,13 +1,13 @@
 import { useState } from "react";
 import Map, { Source, Layer, type LayerProps } from "react-map-gl/maplibre";
 import "maplibre-gl/dist/maplibre-gl.css";
-import type { SourceWithLayers } from "../models/sourceWithLayers";
+import type { SourceWithLayers } from "../types";
 
 type MapProps = {
   sourcesAndLayers: SourceWithLayers[];
 };
 
-export default function App({ sourcesAndLayers }: MapProps) {
+export default function MapComponent({ sourcesAndLayers }: MapProps) {
   const [viewport, setViewport] = useState({
     latitude: 40.78,
     longitude: -73.96,
