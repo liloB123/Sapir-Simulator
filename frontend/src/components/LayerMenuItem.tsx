@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import type { FC } from 'react';
-import { Settings2, type LucideIcon } from "lucide-react";
-import { useLayer } from "../hooks/useLayer";
+import { Settings2 } from "lucide-react";
+import { useLayers } from "../hooks/useLayer";
 
 interface LayerMenuItemDetailsProps {
   name: string;
@@ -21,11 +22,16 @@ const LayerMenuItemDetails: FC<LayerMenuItemDetailsProps> = ({ name, description
 
 interface LayerMenuItemToggleProps {
   name: string;
-  setLayer: (key: string, value: boolean) => void;
   isActive: boolean;
 }
 
-const LayerMenuItemToggle: FC<LayerMenuItemToggleProps> = ({ name, setLayer, isActive }) => {
+const LayerMenuItemToggle: FC<LayerMenuItemToggleProps> = ({ name, isActive }) => {
+  const [_, setLayers] = useLayers()
+
+  const setLayer = (key: string, value: boolean) => {
+    setLayers(prev => ({ ...prev, [key]: value }));
+  }
+
   return (
     <label className="inline-flex items-center cursor-pointer">
       <input
@@ -45,18 +51,29 @@ const LayerMenuItemToggle: FC<LayerMenuItemToggleProps> = ({ name, setLayer, isA
   )
 }
 
+
+const LayerMenuItemExtraSettingsButton: FC = () => {
+  return (
+    <button
+      aria-label="Settings"
+      type="button"
+      style={{ background: 'transparent', padding: 0, border: 'none' }}
+    >
+      <Settings2 className="text-white w-4 h-4" />
+    </button>
+  )
+}
+
+
 interface LayerMenuItemProps {
   name: string;
-  icon: LucideIcon;
-  color: string;
+  Icon: FC;
   description: string
 }
 
-const LayerMenuItem: FC<LayerMenuItemProps> = ({ name, icon, color, description }) => {
-  const { getLayer, setLayer } = useLayer();
-  const isActive = getLayer(name);
-
-  const Icon = icon;
+const LayerMenuItem: FC<LayerMenuItemProps> = ({ name, Icon, description }) => {
+  const [layers, _] = useLayers()
+  const isActive = layers[name];
 
   return (
     <div
@@ -66,23 +83,16 @@ const LayerMenuItem: FC<LayerMenuItemProps> = ({ name, icon, color, description 
         }`}
     >
       <div className="flex items-center gap-4 w-20 justify-between">
-        <button
-          aria-label="Settings"
-          type="button"
-          style={{ background: 'transparent', padding: 0, border: 'none' }}
-        >
-          <Settings2 className="text-white w-4 h-4" />
-        </button>
+        <LayerMenuItemExtraSettingsButton />
         <LayerMenuItemToggle
           name={name}
-          setLayer={setLayer}
           isActive={isActive} />
       </div>
       <div className="flex items-center gap-3">
         <LayerMenuItemDetails
           name={name}
           description={description} />
-        <Icon className={`w-5 h-5 ${color}`} />
+        <Icon/>
       </div>
     </div>
   );

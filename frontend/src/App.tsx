@@ -1,8 +1,8 @@
 import type { FC } from 'react';
-import { LayerProvider, type LayerState } from './contexts/LayersMenuContext';
+import { LayersProvider, type LayersState } from './contexts/LayersMenuContext';
 import MapContainer from './components/MapContainer';
 
-const initialLayers: LayerState = {
+const initialLayers: LayersState = {
   "מרחק מקו הגבול": false,
   "מרחק מיישובים מרכזיים": false,
   "פוליגונים בשטח ישראלי": false,
@@ -12,9 +12,9 @@ const initialLayers: LayerState = {
 
 const App: FC = () => {
   return (
-    <LayerProvider initialLayers={initialLayers}>
+    <LayersProvider initialLayers={initialLayers}>
       <MapContainer />
-    </LayerProvider>
+    </LayersProvider>
   );
 };
 

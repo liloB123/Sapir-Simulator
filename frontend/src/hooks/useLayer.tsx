@@ -1,9 +1,9 @@
 import { useContext } from "react";
-import { LayerContext, type LayerContextType } from "../contexts/LayersMenuContext";
+import { LayersContext, type LayersContextType } from "../contexts/LayersMenuContext";
 
-export const useLayer = (): LayerContextType => {
-    const context = useContext(LayerContext);
-    
+export const useLayers = (): LayersContextType => {
+    const context = useContext(LayersContext);
+
     if (!context) {
         throw new Error('useLayer must be used within a LayerProvidor');
     }

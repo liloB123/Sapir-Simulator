@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState } from "react"
 import type { FC } from 'react';
 import LayerMenuButton  from "./LayerMenuButton";
@@ -11,13 +12,28 @@ import {
     Target
 } from "lucide-react";
 
+const ShieldWithColor: FC = () => <Shield className={`w-5 h-5 text-red-400`} />
 
-const LAYERS_MENU_ITEMS = {
-    border_distance: { name: "מרחק מקו הגבול", icon: Shield, color: "text-red-400", description: "עוצמה גבוהה ליד הגבול הצפוני" },
-    settlements_distance: { name: "מרחק מיישובים מרכזיים", icon: Building2, color: "text-blue-400", description: "זרימת פעילות סביב ערים" },
-    israeli_polygons: { name: "פוליגונים בשטח ישראלי", icon: MapPin, color: "text-green-400", description: "אזורים אסטרטגיים בישראל" },
-    cross_border_polygons: { name: "פוליגונים חוצי גבולות", icon: Navigation, color: "text-purple-400", description: "פעילות בסוריה ולבנון" },
-    strategic_points: { name: "נקודות אסטרטגיות", icon: Target, color: "text-orange-400", description: "מוקדי חשיבות על הגבול" }
+const Building2WithColor: FC = () => <Building2 className={`w-5 h-5 text-blue-400`} />
+
+const MapPinWithColor: FC = () => <MapPin className={`w-5 h-5 text-green-400`} />
+
+const NavigationWithColor: FC = () => <Navigation className={`w-5 h-5 text-purple-400`} />
+
+const TargetWithColor: FC = () => <Target className={`w-5 h-5 text-orange-400`} />
+
+
+const layerMenuItemNames = ["border_distance", "settlements_distance", "israeli_polygons", "cross_border_polygons", "strategic_points"] as const;
+
+type layerMenuItemName = (typeof layerMenuItemNames)[number]
+
+
+const LAYERS_MENU_ITEMS: Record<layerMenuItemName, {name: string, Icon: FC, description: string }> = {
+    border_distance: { name: "מרחק מקו הגבול", Icon: ShieldWithColor, description: "עוצמה גבוהה ליד הגבול הצפוני" },
+    settlements_distance: { name: "מרחק מיישובים מרכזיים", Icon: Building2WithColor, description: "זרימת פעילות סביב ערים" },
+    israeli_polygons: { name: "פוליגונים בשטח ישראלי", Icon: MapPinWithColor, description: "אזורים אסטרטגיים בישראל" },
+    cross_border_polygons: { name: "פוליגונים חוצי גבולות", Icon: NavigationWithColor, description: "פעילות בסוריה ולבנון" },
+    strategic_points: { name: "נקודות אסטרטגיות", Icon: TargetWithColor, description: "מוקדי חשיבות על הגבול" }
 };
 
 

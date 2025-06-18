@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect, useState } from 'react';
 import type { FC } from 'react';
 
@@ -15,7 +14,7 @@ const URLResponse: FC = () => {
         const result = await fetchRootMessage();
         setData(result);
       } catch (error) {
-        setError('Failed to fetch data');
+        setError(`Failed to fetch data ${error}`);
       } finally {
         setLoading(false)
       }

@@ -1,36 +1,24 @@
-import { createContext, useState, type ReactNode } from "react";
-import type { FC } from 'react';
+import { createContext, useState } from "react";
+import type { FC, PropsWithChildren } from 'react';
 
-export type LayerState = Record<string, boolean>;
+export type LayersState = Record<string, boolean>;
 
-export interface LayerContextType {
-    layers: LayerState;
-    setLayer: (key: string, value: boolean) => void;
-    getLayer: (key: string) => boolean;
-};
+export type LayersContextType = [
+    LayersState,
+    React.Dispatch<React.SetStateAction<LayersState>>
+];
 
-export const LayerContext = createContext<LayerContextType | undefined>(undefined);
+export const LayersContext = createContext<LayersContextType | undefined>(undefined);
 
-interface LayerProviderProps {
-    children: ReactNode;
-    initialLayers?: LayerState;
-};
+type LayersProviderProps = PropsWithChildren<{initialLayers?: LayersState}>
 
-export const LayerProvider: FC<LayerProviderProps> = ({ children, initialLayers = {} }) => {
-    const [layers, setLayers] = useState<LayerState>(initialLayers)
-
-    const setLayer = (key: string, value: boolean) => {
-        setLayers(prev => ({ ...prev, [key]: value }));
-    }
-
-    const getLayer = (key: string) => {
-        return layers[key] || false
-    }
+export const LayersProvider: FC<LayersProviderProps> = ({ children, initialLayers = {} }) => {
+    const [layers, setLayers] = useState<LayersState>(initialLayers)
 
     return (
-        <LayerContext.Provider value={{ layers: layers, setLayer: setLayer, getLayer: getLayer }}>
+        <LayersContext.Provider value={[layers, setLayers]}>
             {children}
-        </LayerContext.Provider>
+        </LayersContext.Provider>
     );
 };
 

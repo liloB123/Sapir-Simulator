@@ -1,11 +1,10 @@
 import type { FC } from 'react';
 import LayerMenuItem from "./LayerMenuItem"
-import type { LucideIcon } from "lucide-react";
 import ActiveLayersCounter from "./ActiveLayersCounter";
 
 interface LayersMenuProps {
   isOpen: boolean;
-  layers: { name: string; icon: LucideIcon; color: string; description: string }[];
+  layers: { name: string; Icon: FC; description: string }[];
 }
 
 const LayersMenu: FC<LayersMenuProps> = ({ isOpen, layers }) => {
@@ -22,12 +21,11 @@ const LayersMenu: FC<LayersMenuProps> = ({ isOpen, layers }) => {
             <h2 className="text-lg font-bold text-white mb-4 self text-right">שכבות גאורפיות</h2>
           </div>
           <div className="overflow-y-auto space-y-4 pr-1 flex-1">
-          {layers.map(({ name, icon, color, description }) => (
+          {layers.map(({ name, Icon, description }) => (
             <LayerMenuItem
               key={name}
               name={name}
-              icon={icon}
-              color={color}
+              Icon={Icon}
               description={description}
             />
           ))}
