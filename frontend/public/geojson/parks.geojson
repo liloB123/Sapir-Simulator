@@ -1,0 +1,29 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": { "name": "Great Lawn Park" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-73.9654, 40.7829]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Sheep Meadow Park" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-73.9735, 40.7712]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Turtle Pond" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-73.9680, 40.7794]
+      }
+    }
+  ]
+}

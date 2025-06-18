@@ -1,0 +1,33 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": { "neighborhood": "Upper West Side" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [-73.9819, 40.7993],
+          [-73.9642, 40.7993],
+          [-73.9642, 40.7758],
+          [-73.9819, 40.7758],
+          [-73.9819, 40.7993]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "neighborhood": "Upper East Side" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [-73.9642, 40.7993],
+          [-73.9491, 40.7993],
+          [-73.9491, 40.7758],
+          [-73.9642, 40.7758],
+          [-73.9642, 40.7993]
+        ]]
+      }
+    }
+  ]
+}
