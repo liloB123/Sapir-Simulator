@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import type { FC } from 'react';
 
 import { fetchRootMessage } from '../api';
 
-const URLResponse: React.FC = () => {
+const URLResponse: FC = () => {
   const [data, setData] = useState<string>();
   const [error, setError] = useState<string | null>();
   const [loading, setLoading] = useState<boolean>(true)

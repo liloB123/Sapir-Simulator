@@ -1,26 +1,29 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import type { FC } from 'react';
 import Map from "react-map-gl/maplibre";
-import { useLayer } from "../contexts/LayersMenuContext";
+import { useLayer } from "../hooks/useLayer";
+import type { ViewState } from 'react-map-gl/mapbox';
 
-const BaseMap: React.FC = () => {
-  const [viewport, setViewport] = useState({
+const BaseMap: FC = () => {
+  const [viewport , setViewport] = useState<ViewState>({
     latitude: 31.771959,
     longitude: 35.217018,
     zoom: 6,
+    bearing: 0,
+    pitch: 0,
+    padding: { top: 0, bottom: 0, left: 0, right: 0 },
   });
 
-  const { layers: layers } = useLayer();
+  const { layers } = useLayer();
 
   return (
-    <div>
-      <div className="fixed inset-0 overflow-hidden">
+    <>
+      <div className="w-screen h-screen inset-0 overflow-hidden">
         <Map
           {...viewport}
           style={{ width: "100%", height: "100%" }}
           mapStyle="https://api.maptiler.com/maps/streets/style.json?key=sv1aPMPj3scmsnN1HtxP"
-          onMove={(e) => {
-            setViewport(e.viewState);
-          }}
+          onMove={({viewState}) => setViewport(viewState)}
         >
         </Map>
       </div>
@@ -34,7 +37,7 @@ const BaseMap: React.FC = () => {
           ))}
         </div>
       </div>
-    </div>
+    </>
   );
 }
 

@@ -1,24 +1,22 @@
-/* eslint-disable react-refresh/only-export-components */
-import React, { createContext, useContext, useState, type ReactNode } from "react";
+import { createContext, useState, type ReactNode } from "react";
+import type { FC } from 'react';
 
-export interface LayerState {
-    [key: string]: boolean
-};
+export type LayerState = Record<string, boolean>;
 
-interface LayerContextType {
+export interface LayerContextType {
     layers: LayerState;
     setLayer: (key: string, value: boolean) => void;
     getLayer: (key: string) => boolean;
 };
 
-const LayerContext = createContext<LayerContextType | undefined>(undefined);
+export const LayerContext = createContext<LayerContextType | undefined>(undefined);
 
 interface LayerProviderProps {
     children: ReactNode;
     initialLayers?: LayerState;
 };
 
-export const LayerProvider: React.FC<LayerProviderProps> = ({ children, initialLayers: initialLayers = {} }) => {
+export const LayerProvider: FC<LayerProviderProps> = ({ children, initialLayers = {} }) => {
     const [layers, setLayers] = useState<LayerState>(initialLayers)
 
     const setLayer = (key: string, value: boolean) => {
@@ -36,16 +34,3 @@ export const LayerProvider: React.FC<LayerProviderProps> = ({ children, initialL
     );
 };
 
-export const useLayer = (): LayerContextType => {
-    const context = useContext(LayerContext);
-    if (!context) {
-        throw new Error('useLayer must be used within a LayerProvidor');
-    }
-    return context;
-};
-
-export const useActiveLayersCount = (): number => {
-    const { layers } = useLayer()
-
-    return Object.values(layers).filter(Boolean).length;
-}
