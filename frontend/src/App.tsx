@@ -9,7 +9,7 @@ import Map, {
 const rasterSource: SourceProps = {
   type: "raster",
   tiles: [
-    "https://api.maptiler.com/tiles/uk-osgb1919/{z}/{x}/{y}.jpg?key=sv1aPMPj3scmsnN1HtxP",
+    "https://trailstash.github.io/naturalearthtiles/tiles/natural_earth_2.raster/{z}/{x}/{y}.webp",
   ],
   tileSize: 256,
 };
