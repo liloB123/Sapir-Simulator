@@ -1,43 +1,60 @@
-import React from "react";
-import Map, {
-  Layer,
-  Source,
-  type LayerProps,
-  type SourceProps,
-} from "react-map-gl/maplibre";
+import React, { useState } from "react";
+import Map from "react-map-gl/maplibre";
 
-const rasterSource: SourceProps = {
-  type: "raster",
-  tiles: [
-    "https://trailstash.github.io/naturalearthtiles/tiles/natural_earth_2.raster/{z}/{x}/{y}.webp",
-  ],
-  tileSize: 256,
-};
+const HeatmapComponent = () => {
+  const [viewState, setViewState] = useState({
+    longitude: 34.7818,
+    latitude: 32.0853,
+    zoom: 6,
+  });
 
-const rasterLayer: LayerProps = {
-  id: "distance-heat",
-  type: "raster",
-  paint: {
-    "raster-opacity": 0.7,
-  },
-};
+  // מפת חום מבוססת גובה ללא API key
+  const heatmapStyle = {
+    version: 8,
+    sources: {
+      osm: {
+        type: "raster",
+        tiles: ["https://tile.openstreetmap.org/{z}/{x}/{y}.png"],
+        tileSize: 256,
+        attribution: "© OpenStreetMap contributors",
+      },
+      terrain: {
+        type: "raster",
+        tiles: ["https://tile.opentopomap.org/{z}/{x}/{y}.png"],
+        tileSize: 256,
+        attribution: "© OpenTopoMap (CC-BY-SA)",
+      },
+    },
+    layers: [
+      {
+        id: "base-layer",
+        type: "raster",
+        source: "osm",
+      },
+      {
+        id: "heat-layer",
+        type: "raster",
+        source: "terrain",
+        paint: {
+          "raster-opacity": 0.8,
+          "raster-hue-rotate": 0, // in degrees
+          //   "raster-saturation": 0.2,
+          "raster-contrast": 0.3,
+          "raster-brightness-min": 0.2,
+          "raster-brightness-max": 0.8,
+        },
+      },
+    ],
+  };
 
-const App: React.FC = () => {
   return (
     <Map
-      initialViewState={{
-        latitude: 32.0853,
-        longitude: 34.7818,
-        zoom: 13,
-      }}
-      style={{ width: "100vw", height: "100vh" }}
-      mapStyle="https://demotiles.maplibre.org/style.json"
-    >
-      <Source id="uk-raster" {...rasterSource}>
-        <Layer {...rasterLayer} />
-      </Source>
-    </Map>
+      {...viewState}
+      onMove={(evt) => setViewState(evt.viewState)}
+      mapStyle={heatmapStyle}
+      style={{ width: "100%", height: "100vh" }}
+    />
   );
 };
 
-export default App;
+export default HeatmapComponent;
