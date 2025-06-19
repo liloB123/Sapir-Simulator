@@ -3,9 +3,7 @@ import { LayersProvider } from './contexts/LayersMenuContext';
 import MapContainer from './components/MapContainer';
 import type { layerMenuItemName } from './components/layerMenuConsts';
 
-type LayersState = Record<layerMenuItemName, boolean>;
-
-const initialLayers: LayersState = {
+const initialLayers: Record<layerMenuItemName, boolean> = {
   "border_distance": false,
   "settlements_distance": false,
   "israeli_polygons": false,
