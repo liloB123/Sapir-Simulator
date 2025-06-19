@@ -1,7 +1,6 @@
 import type { FC } from 'react';
-import { LayersProvider } from './contexts/LayersMenuContext';
+import { LayersProvider, type layerMenuItemName } from './contexts/LayersMenuContext';
 import MapContainer from './components/MapContainer';
-import type { layerMenuItemName } from './components/layerMenuConsts';
 
 const initialLayers: Record<layerMenuItemName, boolean> = {
   "border_distance": false,
