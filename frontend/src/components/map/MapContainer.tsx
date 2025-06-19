@@ -1,8 +1,8 @@
 import { useState } from "react"
 import type { FC } from 'react';
-import LayerMenuButton from "../layers-menu/LayerMenuButton";
+import LayerMenuButton from "../LayersMenu/LayerMenuButton";
 import BaseMap from "./BaseMap";
-import LayersMenu from "../layers-menu/LayersMenu";
+import LayersMenu from "../LayersMenu";
 
 const MapContainer: FC = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false)

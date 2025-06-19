@@ -31,7 +31,6 @@ export type LayerMenuItemProps = {
 }
 
 const LayerMenuItem: FC<LayerMenuItemProps> = ({ name }) => {
-  const { displayName, Icon, description } = layerMenuItems[name];
   const [layers,] = useLayers()
   const isActive = layers[name];
 
@@ -48,11 +47,7 @@ const LayerMenuItem: FC<LayerMenuItemProps> = ({ name }) => {
           name={name}
           isActive={isActive} />
       </div>
-      <LayerMenuItemDetails
-        displayName={displayName}
-        Icon={Icon}
-        description={description}
-      />
+      <LayerMenuItemDetails {...layerMenuItems[name]} />
     </div>
   );
 };
