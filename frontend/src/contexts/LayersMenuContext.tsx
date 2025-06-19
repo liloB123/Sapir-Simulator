@@ -6,17 +6,26 @@ const layerNames = ["border_distance", "settlements_distance", "israeli_polygons
 
 export type LayerName = (typeof layerNames)[number]
 
+const optionsNames = ["לינארי", "אקספוננציאלי"] as const
+export type OptionsName = (typeof optionsNames)[number]
+
+export type LayerSettings = {
+  isActive: boolean;
+  isExpended: boolean;
+  selectedOption: OptionsName | null;
+};
+
 export type LayersContextType = [
-    Record<LayerName, boolean>,
-    Dispatch<SetStateAction<Record<LayerName, boolean>>>
+    Record<LayerName, LayerSettings>,
+    Dispatch<SetStateAction<Record<LayerName, LayerSettings>>>
 ];
 
 export const LayersContext = createContext<LayersContextType | undefined>(undefined);
 
-type LayersProviderProps = PropsWithChildren<{ initialLayers: Record<LayerName, boolean> }>
+type LayersProviderProps = PropsWithChildren<{ initialLayers: Record<LayerName, LayerSettings> }>
 
 export const LayersProvider: FC<LayersProviderProps> = ({ children, initialLayers }) => {
-    const [layers, setLayers] = useState<Record<LayerName, boolean>>(initialLayers)
+    const [layers, setLayers] = useState<Record<LayerName, LayerSettings>>(initialLayers)
 
     return (
         <LayersContext.Provider value={[layers, setLayers]}>

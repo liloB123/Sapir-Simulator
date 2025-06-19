@@ -1,4 +1,4 @@
-import type { FC } from 'react';
+import { type FC } from 'react';
 import LayerMenuItem from "./LayerMenuItem"
 import ActiveLayersCounter from "./ActiveLayersCounter";
 import { useLayers } from '../../hooks/useLayers';

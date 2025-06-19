@@ -5,14 +5,22 @@ import type { LayerMenuItemProps } from "./LayerMenuItem";
 type LayerMenuItemToggleProps = Pick<LayerMenuItemProps, "name"> & { isActive: boolean }
 
 const LayerMenuItemToggle: FC<LayerMenuItemToggleProps> = ({ name, isActive }) => {
-    const [,setLayers] = useLayers()
+    const [, setLayers] = useLayers()
 
     return (
         <label className="inline-flex items-center cursor-pointer">
             <input
                 type="checkbox"
                 className="sr-only peer"
-                onChange={() => setLayers(prev => ({ ...prev, [name]: !isActive }))}
+                onClick={() =>
+                    setLayers(prev => ({
+                        ...prev,
+                        [name]: {
+                            ...prev[name],
+                            isActive: !prev[name].isActive
+                        }
+                    }))
+                }
                 checked={isActive}
             />
             <div
