@@ -3,13 +3,8 @@ import type { FC } from 'react';
 import LayerMenuButton from "./LayerMenuButton";
 import BaseMap from "./BaseMap";
 import LayersMenu from "./LayersMenu";
-import type { layerMenuItemName } from "./layerMenuConsts";
 
-type MapContainerProps = {
-    layersNames: layerMenuItemName[]
-}
-
-const MapContainer: FC<MapContainerProps> = ({ layersNames }) => {
+const MapContainer: FC = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false)
 
     return (
@@ -19,7 +14,6 @@ const MapContainer: FC<MapContainerProps> = ({ layersNames }) => {
                 <LayerMenuButton isOpen={isMenuOpen} onMenuToggle={() => setIsMenuOpen(prev => !prev)} />
                 <LayersMenu
                     isOpen={isMenuOpen}
-                    layersNames={layersNames}
                 />
             </div>
         </div>

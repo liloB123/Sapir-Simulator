@@ -1,6 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { createContext, useState } from "react";
 import type { FC, PropsWithChildren, Dispatch, SetStateAction } from 'react';
-import type { layerMenuItemName } from "../components/layerMenuConsts";
+
+const layerMenuItemNames = ["border_distance", "settlements_distance", "israeli_polygons", "cross_border_polygons", "strategic_points"] as const;
+
+export type layerMenuItemName = (typeof layerMenuItemNames)[number]
 
 export type LayersContextType = [
     Record<layerMenuItemName, boolean>,

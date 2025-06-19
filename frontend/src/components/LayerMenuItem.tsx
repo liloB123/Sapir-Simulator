@@ -2,8 +2,8 @@
 import type { FC } from 'react';
 import { Settings2 } from "lucide-react";
 import { useLayers } from "../hooks/useLayers";
-import type { layerMenuItemName } from './layerMenuConsts';
 import LayerMenuItemToggle from './LayerMenuItemToggle';
+import type { layerMenuItemName } from '../contexts/LayersMenuContext';
 
 type LayerMenuItemDetailsProps = Pick<LayerMenuItemDetailsConfig, "displayName" | "description">
 

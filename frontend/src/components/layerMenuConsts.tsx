@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import type { FC } from "react";
 import {
     MapPin,
@@ -8,6 +7,7 @@ import {
     Target
 } from "lucide-react";
 import type { LayerMenuItemDetailsConfig } from "./LayerMenuItem";
+import type { layerMenuItemName } from "../contexts/LayersMenuContext";
 
 const ShieldWithColor: FC = () => <Shield className={`w-5 h-5 text-red-400`} />
 
@@ -18,11 +18,6 @@ const MapPinWithColor: FC = () => <MapPin className={`w-5 h-5 text-green-400`} /
 const NavigationWithColor: FC = () => <Navigation className={`w-5 h-5 text-purple-400`} />
 
 const TargetWithColor: FC = () => <Target className={`w-5 h-5 text-orange-400`} />
-
-
-const layerMenuItemNames = ["border_distance", "settlements_distance", "israeli_polygons", "cross_border_polygons", "strategic_points"] as const;
-
-export type layerMenuItemName = (typeof layerMenuItemNames)[number]
 
 
 export const layerMenuItems: Record<layerMenuItemName, LayerMenuItemDetailsConfig> = {

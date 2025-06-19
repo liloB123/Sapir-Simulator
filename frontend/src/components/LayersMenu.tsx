@@ -1,15 +1,18 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import type { FC } from 'react';
 import LayerMenuItem from "./LayerMenuItem"
 import ActiveLayersCounter from "./ActiveLayersCounter";
-import { layerMenuItems, type layerMenuItemName } from './layerMenuConsts';
-
+import { layerMenuItems } from './layerMenuConsts';
+import { useLayers } from '../hooks/useLayers';
+import type { layerMenuItemName } from '../contexts/LayersMenuContext';
 
 type LayersMenuProps = {
   isOpen: boolean;
-  layersNames: layerMenuItemName[];
 }
 
-const LayersMenu: FC<LayersMenuProps> = ({ isOpen, layersNames: layers }) => {
+const LayersMenu: FC<LayersMenuProps> = ({ isOpen }) => {
+  const [layers, _] = useLayers()
+
   if (!isOpen) return null;
 
   return (
@@ -23,7 +26,7 @@ const LayersMenu: FC<LayersMenuProps> = ({ isOpen, layersNames: layers }) => {
             <h2 className="text-lg font-bold text-white mb-4 self text-right">שכבות גאורפיות</h2>
           </div>
           <div className="overflow-y-auto space-y-4 pr-1 flex-1">
-            {layers.map((currLayer) => {
+            {(Object.keys(layers) as layerMenuItemName[]).map((currLayer) => {
               const { displayName, Icon, description } = layerMenuItems[currLayer];
               return (
                 <LayerMenuItem

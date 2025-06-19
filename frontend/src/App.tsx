@@ -14,8 +14,7 @@ const initialLayers: Record<layerMenuItemName, boolean> = {
 const App: FC = () => {
   return (
     <LayersProvider initialLayers={initialLayers}>
-      <MapContainer
-        layersNames={Object.keys(initialLayers) as layerMenuItemName[]} />
+      <MapContainer/>
     </LayersProvider>
   );
 };
