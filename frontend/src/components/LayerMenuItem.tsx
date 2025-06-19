@@ -2,76 +2,41 @@
 import type { FC } from 'react';
 import { Settings2 } from "lucide-react";
 import { useLayers } from "../hooks/useLayers";
+import type { layerMenuItemName } from './layerMenuConsts';
+import LayerMenuItemToggle from './LayerMenuItemToggle';
 
-interface LayerMenuItemDetailsProps {
-  name: string;
+type LayerMenuItemDetailsProps = Pick<LayerMenuItemDetailsConfig, "displayName" | "description">
+
+const LayerMenuItemDetails: FC<LayerMenuItemDetailsProps> = ({ displayName, description }) =>
+  <div className="flex flex-col items-end text-right">
+    <span className="text-xs font-medium text-white cursor-default">
+      {displayName}
+    </span>
+    <p className="text-xs text-gray-500">{description}</p>
+  </div>;
+
+
+const LayerMenuItemExtraSettingsButton: FC = () =>
+  <button
+    aria-label="Settings"
+    type="button"
+    style={{ background: 'transparent', padding: 0, border: 'none' }}
+  >
+    <Settings2 className="text-white w-4 h-4" />
+  </button>;
+
+
+export type LayerMenuItemDetailsConfig = {
+  displayName: string;
+  Icon: FC;
   description: string;
-}
-
-const LayerMenuItemDetails: FC<LayerMenuItemDetailsProps> = ({ name, description }) => {
-  return (
-    <div className="flex flex-col items-end text-right">
-      <span className="text-xs font-medium text-white cursor-default">
-        {name}
-      </span>
-      <p className="text-xs text-gray-500">{description}</p>
-    </div>
-  );
 };
 
+export type LayerMenuItemProps = {
+  name: layerMenuItemName;
+} & LayerMenuItemDetailsConfig;
 
-interface LayerMenuItemToggleProps {
-  name: string;
-  isActive: boolean;
-}
-
-const LayerMenuItemToggle: FC<LayerMenuItemToggleProps> = ({ name, isActive }) => {
-  const [_, setLayers] = useLayers()
-
-  const setLayer = (key: string, value: boolean) => {
-    setLayers(prev => ({ ...prev, [key]: value }));
-  }
-
-  return (
-    <label className="inline-flex items-center cursor-pointer">
-      <input
-        type="checkbox"
-        className="sr-only peer"
-        onChange={() => setLayer(name, !isActive)}
-        checked={isActive}
-      />
-      <div
-        className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none
-                  dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full
-                  rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute
-                  after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full
-                  after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-cyan-500 dark:peer-checked:bg-blue-600"
-      ></div>
-    </label>
-  )
-}
-
-
-const LayerMenuItemExtraSettingsButton: FC = () => {
-  return (
-    <button
-      aria-label="Settings"
-      type="button"
-      style={{ background: 'transparent', padding: 0, border: 'none' }}
-    >
-      <Settings2 className="text-white w-4 h-4" />
-    </button>
-  )
-}
-
-
-interface LayerMenuItemProps {
-  name: string;
-  Icon: FC;
-  description: string
-}
-
-const LayerMenuItem: FC<LayerMenuItemProps> = ({ name, Icon, description }) => {
+const LayerMenuItem: FC<LayerMenuItemProps> = ({ name, displayName, Icon, description }) => {
   const [layers, _] = useLayers()
   const isActive = layers[name];
 
@@ -90,9 +55,9 @@ const LayerMenuItem: FC<LayerMenuItemProps> = ({ name, Icon, description }) => {
       </div>
       <div className="flex items-center gap-3">
         <LayerMenuItemDetails
-          name={name}
+          displayName={displayName}
           description={description} />
-        <Icon/>
+        <Icon />
       </div>
     </div>
   );

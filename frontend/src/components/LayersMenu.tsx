@@ -1,13 +1,15 @@
 import type { FC } from 'react';
 import LayerMenuItem from "./LayerMenuItem"
 import ActiveLayersCounter from "./ActiveLayersCounter";
+import { layerMenuItems, type layerMenuItemName } from './layerMenuConsts';
 
-interface LayersMenuProps {
+
+type LayersMenuProps = {
   isOpen: boolean;
-  layers: { name: string; Icon: FC; description: string }[];
+  layersNames: layerMenuItemName[];
 }
 
-const LayersMenu: FC<LayersMenuProps> = ({ isOpen, layers }) => {
+const LayersMenu: FC<LayersMenuProps> = ({ isOpen, layersNames: layers }) => {
   if (!isOpen) return null;
 
   return (
@@ -21,14 +23,17 @@ const LayersMenu: FC<LayersMenuProps> = ({ isOpen, layers }) => {
             <h2 className="text-lg font-bold text-white mb-4 self text-right">שכבות גאורפיות</h2>
           </div>
           <div className="overflow-y-auto space-y-4 pr-1 flex-1">
-          {layers.map(({ name, Icon, description }) => (
-            <LayerMenuItem
-              key={name}
-              name={name}
-              Icon={Icon}
-              description={description}
-            />
-          ))}
+            {layers.map((currLayer) => {
+              const { displayName, Icon, description } = layerMenuItems[currLayer];
+              return (
+                <LayerMenuItem
+                  name={currLayer}
+                  displayName={displayName}
+                  Icon={Icon}
+                  description={description}
+                />
+              )
+            })}
           </div>
         </div>
       </div>

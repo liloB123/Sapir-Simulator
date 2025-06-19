@@ -1,18 +1,19 @@
 import { createContext, useState } from "react";
-import type { FC, PropsWithChildren } from 'react';
+import type { FC, PropsWithChildren, Dispatch, SetStateAction } from 'react';
+import type { layerMenuItemName } from "../components/layerMenuConsts";
 
-export type LayersState = Record<string, boolean>;
+type LayersState = Record<layerMenuItemName, boolean>;
 
 export type LayersContextType = [
     LayersState,
-    React.Dispatch<React.SetStateAction<LayersState>>
+    Dispatch<SetStateAction<LayersState>>
 ];
 
 export const LayersContext = createContext<LayersContextType | undefined>(undefined);
 
-type LayersProviderProps = PropsWithChildren<{initialLayers?: LayersState}>
+type LayersProviderProps = PropsWithChildren<{ initialLayers: LayersState }>
 
-export const LayersProvider: FC<LayersProviderProps> = ({ children, initialLayers = {} }) => {
+export const LayersProvider: FC<LayersProviderProps> = ({ children, initialLayers }) => {
     const [layers, setLayers] = useState<LayersState>(initialLayers)
 
     return (
