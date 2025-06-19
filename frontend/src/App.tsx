@@ -1,8 +1,8 @@
 import type { FC } from 'react';
-import { LayersProvider, type layerMenuItemName } from './contexts/LayersMenuContext';
-import MapContainer from './components/MapContainer';
+import { LayersProvider, type LayerName } from './contexts/LayersMenuContext';
+import MapContainer from './components/map/MapContainer';
 
-const initialLayers: Record<layerMenuItemName, boolean> = {
+const initialLayers: Record<LayerName, boolean> = {
   "border_distance": false,
   "settlements_distance": false,
   "israeli_polygons": false,

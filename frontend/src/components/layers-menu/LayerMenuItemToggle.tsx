@@ -1,12 +1,11 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import type { FC } from "react";
-import { useLayers } from "../hooks/useLayers";
+import { useLayers } from "../../hooks/useLayers";
 import type { LayerMenuItemProps } from "./LayerMenuItem";
 
 type LayerMenuItemToggleProps = Pick<LayerMenuItemProps, "name"> & { isActive: boolean }
 
 const LayerMenuItemToggle: FC<LayerMenuItemToggleProps> = ({ name, isActive }) => {
-    const [_, setLayers] = useLayers()
+    const [,setLayers] = useLayers()
 
     return (
         <label className="inline-flex items-center cursor-pointer">

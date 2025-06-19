@@ -6,8 +6,7 @@ import {
     Navigation,
     Target
 } from "lucide-react";
-import type { LayerMenuItemDetailsConfig } from "./LayerMenuItem";
-import type { layerMenuItemName } from "../contexts/LayersMenuContext";
+import type { LayerName } from "../../contexts/LayersMenuContext";
 
 const ShieldWithColor: FC = () => <Shield className={`w-5 h-5 text-red-400`} />
 
@@ -19,8 +18,13 @@ const NavigationWithColor: FC = () => <Navigation className={`w-5 h-5 text-purpl
 
 const TargetWithColor: FC = () => <Target className={`w-5 h-5 text-orange-400`} />
 
+export type LayerMenuItemDetailsConfig = {
+    displayName: string;
+    Icon: FC;
+    description: string;
+};
 
-export const layerMenuItems: Record<layerMenuItemName, LayerMenuItemDetailsConfig> = {
+export const layerMenuItems: Record<LayerName, LayerMenuItemDetailsConfig> = {
     border_distance: { displayName: "מרחק מקו הגבול", Icon: ShieldWithColor, description: "עוצמה גבוהה ליד הגבול הצפוני" },
     settlements_distance: { displayName: "מרחק מיישובים מרכזיים", Icon: Building2WithColor, description: "זרימת פעילות סביב ערים" },
     israeli_polygons: { displayName: "פוליגונים בשטח ישראלי", Icon: MapPinWithColor, description: "אזורים אסטרטגיים בישראל" },

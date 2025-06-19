@@ -1,17 +1,15 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import type { FC } from 'react';
 import LayerMenuItem from "./LayerMenuItem"
 import ActiveLayersCounter from "./ActiveLayersCounter";
-import { layerMenuItems } from './layerMenuConsts';
-import { useLayers } from '../hooks/useLayers';
-import type { layerMenuItemName } from '../contexts/LayersMenuContext';
+import { useLayers } from '../../hooks/useLayers';
+import type { LayerName } from '../../contexts/LayersMenuContext';
 
 type LayersMenuProps = {
   isOpen: boolean;
 }
 
 const LayersMenu: FC<LayersMenuProps> = ({ isOpen }) => {
-  const [layers, _] = useLayers()
+  const [layers,] = useLayers()
 
   if (!isOpen) return null;
 
@@ -26,17 +24,12 @@ const LayersMenu: FC<LayersMenuProps> = ({ isOpen }) => {
             <h2 className="text-lg font-bold text-white mb-4 self text-right">שכבות גאורפיות</h2>
           </div>
           <div className="overflow-y-auto space-y-4 pr-1 flex-1">
-            {(Object.keys(layers) as layerMenuItemName[]).map((currLayer) => {
-              const { displayName, Icon, description } = layerMenuItems[currLayer];
-              return (
-                <LayerMenuItem
-                  name={currLayer}
-                  displayName={displayName}
-                  Icon={Icon}
-                  description={description}
-                />
-              )
-            })}
+            {(Object.keys(layers) as LayerName[]).map((layer) => (
+              <LayerMenuItem
+                key={layer}
+                name={layer}
+              />
+            ))}
           </div>
         </div>
       </div>
