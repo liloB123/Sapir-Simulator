@@ -15,7 +15,7 @@ const ExtraSettingsOptions: FC<ExtraSettingsOptionsProps> = ({ lable, Icon, name
 
             <input
                 type="radio"
-                name="layer-option"
+                name={`${name}-option`}
                 value={lable}
                 checked={layers[name].selectedOption === lable}
                 onChange={() =>
