@@ -23,7 +23,7 @@ const LayerMenuItemExtraSettingsButton: FC<LayerMenuItemExtraSettingsButtonProps
                         isExpended: !prev[name].isExpended
                     }
                 }))
-            }
+            }      
         >
             <Settings2 className="text-white w-4 h-4" />
         </button>
