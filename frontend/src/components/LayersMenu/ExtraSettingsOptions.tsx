@@ -7,7 +7,6 @@ type ExtraSettingsOptionsProps = ExtraSettingOptionsConfig & { name: LayerName }
 
 
 const ExtraSettingsOptions: FC<ExtraSettingsOptionsProps> = ({ lable, Icon, name }) => {
-    console.log(Icon)
     const [layers, setLayers] = useLayers()
 
     return (

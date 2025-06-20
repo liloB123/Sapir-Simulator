@@ -3,8 +3,8 @@ import { useLayers } from "../../hooks/useLayers";
 import LayerMenuItemToggle from './LayerMenuItemToggle';
 import type { LayerName } from '../../contexts/LayersMenuContext';
 import { layerMenuItems, type LayerMenuItemDetailsConfig } from './consts';
-import ExtraSettings from './LayerMenuItemExtraSettingsButton';
-import LayerMenuItemExtraSettingsButton from './LayerMenuExtraSettings';
+import ExtraSettings from './LayerMenuItemExtraSettings';
+import LayerMenuItemExtraSettingsButton from './LayerMenuExtraSettingsButton';
 
 const LayerMenuItemDetails: FC<LayerMenuItemDetailsConfig> = ({ displayName, Icon, description }) =>
   <div className="flex items-center gap-3">
