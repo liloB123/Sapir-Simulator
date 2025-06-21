@@ -3,7 +3,6 @@ import { createContext, useState } from "react";
 import type { FC, PropsWithChildren, Dispatch, SetStateAction } from 'react';
 
 const layerNames = ["border_distance", "settlements_distance", "israeli_polygons", "cross_border_polygons", "strategic_points"] as const;
-
 export type LayerName = (typeof layerNames)[number]
 
 const optionsNames = ["לינארי", "אקספוננציאלי"] as const
@@ -13,6 +12,7 @@ export type LayerSettings = {
   isActive: boolean;
   isExpended: boolean;
   selectedOption: OptionsName | null;
+  base?: number;
 };
 
 export type LayersContextType = [

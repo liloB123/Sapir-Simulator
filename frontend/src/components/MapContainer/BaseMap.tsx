@@ -38,6 +38,9 @@ const BaseMap: FC = () => {
               <div className="text-blue-600 text-xs">
                 {value.isExpended ? `⚙️ פתוח | נבחר: ${value.selectedOption}` : '⚙️ סגור'}
               </div>
+              <div className="text-blue-600 text-xs">
+                {value.base && value.base}
+              </div>
             </div>
           ))}
         </div>
