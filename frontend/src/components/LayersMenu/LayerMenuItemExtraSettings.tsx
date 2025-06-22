@@ -10,9 +10,6 @@ interface ExtraSettingsProps {
 
 const ExtraSettings: FC<ExtraSettingsProps> = ({ name }) => {
     const [layers, setLayers] = useLayers();
-    const selectedLabel = layers[name].selectedOption;
-
-    const isExponential = selectedLabel === "אקספוננציאלי";
 
     return (
         <div className="mt-3 px-2 text-sm text-white space-y-2 transition-all text-center">
@@ -22,7 +19,7 @@ const ExtraSettings: FC<ExtraSettingsProps> = ({ name }) => {
                     <ExtraSettingsOptions key={option.lable} name={name} {...option} />
                 ))}
             </div>
-            {isExponential && (
+            {layers[name].selectedOption === "אקספוננציאלי" && (
                 <>
                     <p className="text-right text-xs">:בסיס</p>
                     <input

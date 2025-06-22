@@ -13,7 +13,7 @@ const initialLayers: Record<LayerName, LayerSettings> = {
 const App: FC = () => {
   return (
     <LayersProvider initialLayers={initialLayers}>
-      <MapContainer/>
+      <MapContainer />
     </LayersProvider>
   );
 };

@@ -5,7 +5,6 @@ import type { LayerName } from "../../contexts/LayersMenuContext";
 
 type ExtraSettingsOptionsProps = ExtraSettingOptionsConfig & { name: LayerName }
 
-
 const ExtraSettingsOptions: FC<ExtraSettingsOptionsProps> = ({ lable, Icon, name }) => {
     const [layers, setLayers] = useLayers()
 
