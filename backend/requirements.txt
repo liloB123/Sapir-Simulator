@@ -6,3 +6,4 @@ datashader
 pandas
 pillow
 matplotlib
+shapely
