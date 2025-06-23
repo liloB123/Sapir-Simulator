@@ -3,11 +3,11 @@ import { LayersProvider, type LayerName, type LayerSettings } from './contexts/L
 import MapContainer from './components/MapContainer';
 
 const initialLayers: Record<LayerName, LayerSettings> = {
-  border_distance: { isActive: false, isExpended: false, selectedOption: null },
-  settlements_distance: { isActive: false, isExpended: false, selectedOption: null },
-  israeli_polygons: { isActive: false, isExpended: false, selectedOption: null },
-  cross_border_polygons: { isActive: false, isExpended: false, selectedOption: null },
-  strategic_points: { isActive: false, isExpended: false, selectedOption: null }
+  border_distance: { isActive: false, isExpended: false, selectedOption: "לינארי" },
+  settlements_distance: { isActive: false, isExpended: false, selectedOption: "לינארי" },
+  israeli_polygons: { isActive: false, isExpended: false, selectedOption: "לינארי" },
+  cross_border_polygons: { isActive: false, isExpended: false, selectedOption: "לינארי" },
+  strategic_points: { isActive: false, isExpended: false, selectedOption: "לינארי" }
 };
 
 const App: FC = () => {

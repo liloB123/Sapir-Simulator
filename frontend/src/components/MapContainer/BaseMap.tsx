@@ -40,6 +40,7 @@ const BaseMap: FC = () => {
               </div>
               <div className="text-blue-600 text-xs">
                 {value.selectedOption === "אקספוננציאלי" && value.base}
+                {value.selectedOption === "אקספוננציאלי" && typeof value.base}
               </div>
             </div>
           ))}
