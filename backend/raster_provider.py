@@ -24,15 +24,20 @@ def colorize_raster(raster: np.ndarray):
 def dists_from_points_layer(grid_x, grid_y):
     values = np.zeros_like(grid_x)
 
-    lons = [random.uniform(33.75, 39.375) for _ in range(15)]
-    lats = [random.uniform(27.1, 31.9) for _ in range(15)]
+    lons = [random.uniform(33.75, 39.375) for _ in range(10)]
+    lats = [random.uniform(27.1, 31.9) for _ in range(10)]
+    print(lons)
+    print(lats)
     # source_points = [(35, 30), (36, 28.7), (38.6, 30.2)]
+    list_of_dists = []
     for ref_lon, ref_lat in zip(lons, lats):
         ref_x, ref_y = lnglat_to_meters(ref_lon, ref_lat)
         dists = np.sqrt((grid_x - ref_x)**2 + (grid_y - ref_y)**2)
-        values += np.exp(-dists / 50000)
+        normalized_dists = np.exp(-dists / 50000)
+        list_of_dists.append(normalized_dists)
 
-    # values = values / len(lons)
+    # values = np.mean(list_of_dists, axis=0)
+    values = np.max(list_of_dists, axis=0)
     return values
 
 
