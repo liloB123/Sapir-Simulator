@@ -15,7 +15,7 @@ type SharedLayerSettings = {
 
 export type LayerSettings =
     | (SharedLayerSettings & { selectedOption: typeof optionsNames[0] })
-    | (SharedLayerSettings & { selectedOption: typeof optionsNames[1]; base: number })
+    | (SharedLayerSettings & { selectedOption: typeof optionsNames[1]; base: number; isValid: boolean })
     | (SharedLayerSettings & { selectedOption: null });
 
 export type LayersContextType = [
