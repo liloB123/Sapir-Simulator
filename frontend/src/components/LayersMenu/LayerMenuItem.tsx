@@ -26,15 +26,12 @@ const LayerMenuItem: FC<LayerMenuItemProps> = ({ name }) => {
   const [layers] = useLayers();
   const { isActive, isExpended } = layers[name];
 
-  const borderClass = !layers[name].isActive
-    ? "border-white/10 hover:border-white/20"
-    : layers[name].selectedOption == "אקספוננציאלי" && layers[name].isValid === false
-      ? "border-orange-500 shadow-lg shadow-cyan-orange/10"
-      : "border-cyan-500 shadow-lg shadow-cyan-500/10";
-
   return (
     <div
-      className={`p-3 border bg-slate-800/30 rounded-lg flex flex-col gap-2 justify-center min-h-20 ${borderClass}`}
+      className={`p-3 border bg-slate-800/30 rounded-lg flex flex-col gap-2 justify-center min-h-20 ${isActive 
+        ? "border-cyan-500 shadow-lg shadow-cyan-500/10"
+        : "border-white/10 hover:border-white/20"
+      }`}
     >
       <div className="flex justify-between items-center gap-4">
         <div className="flex items-center gap-4 w-20 justify-between">
