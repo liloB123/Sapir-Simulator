@@ -10,7 +10,7 @@ import uvicorn
 import numpy as np
 import matplotlib.pyplot as plt
 from PIL import Image  # check time improvement with other png image maker packages
-from shapely import LineString, Point, distance
+from shapely import Polygon, LineString, Point, distance, contains
 import json
 from shapely.geometry import shape, box
 
@@ -106,6 +106,23 @@ def join_layers(layers: list):
     return joined_layer
 
 
+def filter_outside_polygon(grid_x, grid_y):
+    with open("geometries/lebanon_poly.json") as f:
+        geojson = json.load(f)
+    polygon_geom = shape(geojson["features"][0]["geometry"])
+    polygon_geom_utm = Polygon([lnglat_to_meters(lon, lat) for lon, lat in polygon_geom.exterior.coords])
+
+    flat_x = grid_x.ravel()
+    flat_y = grid_y.ravel()
+
+    points = np.array([Point(x, y) for x, y in zip(flat_x, flat_y)])
+
+    mask_flat = contains(polygon_geom_utm, points)
+    mask = np.reshape(mask_flat, grid_x.shape)
+
+    return mask
+
+
 def render_tile(z: int, x: int, y: int, dist_from_points: bool, dist_from_line: bool,
                 dist_from_points_is_linear: bool = None, dist_from_points_linear_decay_factor: int = None,
                 dist_from_points_exp_decay_factor: int = None, dist_from_line_is_linear: bool = None,
@@ -123,6 +140,14 @@ def render_tile(z: int, x: int, y: int, dist_from_points: bool, dist_from_line: 
         ys = np.linspace(south_utm, north_utm, 256)
         grid_x, grid_y = np.meshgrid(xs, ys)
 
+        lebanon_poly_mask = filter_outside_polygon(grid_x, grid_y)
+        if not os.path.isfile(os.path.join(cache_dir, "lebanon_mask.npy")):
+            os.makedirs(cache_dir, exist_ok=True)
+            np.save(os.path.join(cache_dir, "lebanon_mask.npy"), lebanon_poly_mask)
+    else:
+        print("Got lebanon mask from cache")
+        lebanon_poly_mask = np.load(os.path.join(cache_dir, "lebanon_mask.npy"))
+
     layers = []
     if dist_from_points:
         layers.append(dists_from_points_layer(grid_x, grid_y, dist_from_points_is_linear,
@@ -134,6 +159,7 @@ def render_tile(z: int, x: int, y: int, dist_from_points: bool, dist_from_line: 
                                             use_cache, cache_dir))
 
     joined_layer = join_layers(layers)
+    joined_layer[~lebanon_poly_mask] = 0
 
     joined_layer = np.flipud(joined_layer)
     rgb_img = colorize_raster(joined_layer)
@@ -183,7 +209,7 @@ def should_render(z: int, x: int, y: int) -> bool:
     # check that x, y, and z is in lebanon area
     with open("geometries/lebanon_poly.json") as f:
         geojson = json.load(f)
-        polygon_geom = shape(geojson["features"][0]["geometry"])
+    polygon_geom = shape(geojson["features"][0]["geometry"])
 
     tile = mercantile.Tile(z=z, x=x, y=y)
     bbox = mercantile.bounds(tile)
