@@ -1,4 +1,6 @@
-from fastapi import FastAPI
+import time
+
+from fastapi import FastAPI, HTTPException
 from fastapi.responses import StreamingResponse
 from datashader.utils import lnglat_to_meters
 import mercantile
@@ -6,9 +8,8 @@ import io
 import uvicorn
 import numpy as np
 import matplotlib.pyplot as plt
-from PIL import Image
+from PIL import Image  # check time improvement with other png image maker packages
 from shapely import LineString, Point, distance
-import random
 
 
 app = FastAPI()
@@ -21,27 +22,40 @@ def colorize_raster(raster: np.ndarray):
     return rgb
 
 
-def dists_from_points_layer(grid_x, grid_y):
-    values = np.zeros_like(grid_x)
+def dists_from_points_layer(grid_x, grid_y, dist_from_points_is_linear: bool,
+                            dist_from_points_linear_decay_factor: int = None,
+                            dist_from_points_exp_decay_factor: int = None):
+    number_of_source_points = 10
+    lons = np.random.uniform(33.75, 39.375, number_of_source_points)
+    lats = np.random.uniform(27.1, 31.9, number_of_source_points)
 
-    lons = [random.uniform(33.75, 39.375) for _ in range(10)]
-    lats = [random.uniform(27.1, 31.9) for _ in range(10)]
-    print(lons)
-    print(lats)
-    # source_points = [(35, 30), (36, 28.7), (38.6, 30.2)]
-    list_of_dists = []
-    for ref_lon, ref_lat in zip(lons, lats):
-        ref_x, ref_y = lnglat_to_meters(ref_lon, ref_lat)
-        dists = np.sqrt((grid_x - ref_x)**2 + (grid_y - ref_y)**2)
-        normalized_dists = np.exp(-dists / 50000)
-        list_of_dists.append(normalized_dists)
+    refs = [lnglat_to_meters(lon, lat) for lon, lat in zip(lons, lats)]
+    ref_xs, ref_ys = np.transpose(np.array(refs))
 
-    # values = np.mean(list_of_dists, axis=0)
-    values = np.max(list_of_dists, axis=0)
-    return values
+    grid_x_exp = np.expand_dims(grid_x, 0)  # (1, 256, 256)
+    grid_y_exp = np.expand_dims(grid_y, 0)  # (1, 256, 256)
+
+    ref_xs = ref_xs[:, np.newaxis, np.newaxis]  # (number_of_source_points, 1, 1)
+    ref_ys = ref_ys[:, np.newaxis, np.newaxis]  # (number_of_source_points, 1, 1)
+
+    dists = np.sqrt((grid_x_exp - ref_xs) ** 2 + (grid_y_exp - ref_ys) ** 2)
+
+    if dist_from_points_is_linear:
+        values = dists / dist_from_points_linear_decay_factor
+        values[values > 1] = 1
+        values = 1 - values
+    else:
+        values = np.exp(-dists / dist_from_points_exp_decay_factor)
+
+    # result = np.mean(values, axis=0)
+    result = np.max(values, axis=0)
+
+    return result
 
 
-def dists_from_line_layer(grid_x, grid_y):
+# TODO: make it one-sided linestring
+def dists_from_line_layer(grid_x, grid_y, dist_from_line_is_linear: bool,
+                          dist_from_line_linear_decay_factor: int = None, dist_from_line_exp_decay_factor: int = None):
     source_line = [(35, 28.5), (36, 28), (39, 31)]
     mercator_line = [lnglat_to_meters(lon, lat) for lon, lat in source_line]
     line = LineString(mercator_line)
@@ -50,9 +64,16 @@ def dists_from_line_layer(grid_x, grid_y):
     flat_y = grid_y.ravel()
     points = np.array([Point(x, y) for x, y in zip(flat_x, flat_y)])
 
-    distances = distance(points, line)
-    values_flat = np.exp(-distances / 50000)
-    values = values_flat.reshape(grid_x.shape)
+    dists = distance(points, line)
+
+    if dist_from_line_is_linear:
+        values = dists / dist_from_line_linear_decay_factor
+        values[values > 1] = 1
+        values = 1 - values
+    else:
+        values = np.exp(-dists / dist_from_line_exp_decay_factor)
+
+    values = values.reshape(grid_x.shape)
 
     return values
 
@@ -62,7 +83,10 @@ def join_layers(layers: list):
     return joined_layer
 
 
-def render_tile(x, y, z):
+def render_tile(z: int, x: int, y: int, dist_from_points: bool, dist_from_line: bool,
+                dist_from_points_is_linear: bool = None, dist_from_points_linear_decay_factor: int = None,
+                dist_from_points_exp_decay_factor: int = None, dist_from_line_is_linear: bool = None,
+                dist_from_line_linear_decay_factor: int = None, dist_from_line_exp_decay_factor: int = None):
     tile = mercantile.tile(x, y, z)
     bbox = mercantile.bounds(tile)
     print(bbox)
@@ -73,22 +97,86 @@ def render_tile(x, y, z):
     ys = np.linspace(south_utm, north_utm, 256)
     grid_x, grid_y = np.meshgrid(xs, ys)
 
-    layer1 = dists_from_points_layer(grid_x, grid_y)
-    layer2 = dists_from_line_layer(grid_x, grid_y)
+    layers = []
+    if dist_from_points:
+        layers.append(dists_from_points_layer(grid_x, grid_y, dist_from_points_is_linear,
+                                              dist_from_points_linear_decay_factor, dist_from_points_exp_decay_factor))
+    if dist_from_line:
+        layers.append(dists_from_line_layer(grid_x, grid_y, dist_from_line_is_linear,
+                                            dist_from_line_linear_decay_factor, dist_from_line_exp_decay_factor))
 
-    joined_layer = join_layers([layer1, layer2])
+    joined_layer = join_layers(layers)
 
     rgb_img = colorize_raster(joined_layer)
 
     return Image.fromarray(rgb_img, mode='RGB')
 
 
-@app.get("/tiles/{z}/{x}/{y}.png")
-def get_tile(z: int, x: int, y: int):
-    image = render_tile(x, y, z)
+def validate_input(z: int, x: int, y: int, dist_from_points: bool, dist_from_line: bool,
+                   dist_from_points_is_linear: bool = None, dist_from_points_linear_decay_factor: int = None,
+                   dist_from_points_exp_decay_factor: int = None, dist_from_line_is_linear: bool = None,
+                   dist_from_line_linear_decay_factor: int = None, dist_from_line_exp_decay_factor: int = None):
+    # check that x, y, and z is in lebanon area, if not intersecting at all, return black image (?)
+
+    print(x, y, z, dist_from_points, dist_from_line)
+    print(dist_from_points_is_linear, dist_from_points_linear_decay_factor, dist_from_points_exp_decay_factor,
+          dist_from_line_is_linear, dist_from_line_linear_decay_factor, dist_from_line_exp_decay_factor)
+
+    if dist_from_points:
+        if dist_from_points_is_linear is None:
+            raise HTTPException(
+                status_code=400,
+                detail="`dist_from_points_is_linear` must be provided when `dist_from_points=True`"
+            )
+        if dist_from_points_is_linear and dist_from_points_linear_decay_factor is None:
+            raise HTTPException(
+                status_code=400,
+                detail="`dist_from_points_linear_decay_factor` must be provided when `dist_from_points_is_linear=True`"
+            )
+        if not dist_from_points_is_linear and dist_from_points_exp_decay_factor is None:
+            raise HTTPException(
+                status_code=400,
+                detail="`dist_from_points_exp_decay_factor` must be provided when `dist_from_points_is_linear=False`"
+            )
+    if dist_from_line:
+        if dist_from_line_is_linear is None:
+            raise HTTPException(
+                status_code=400,
+                detail="`dist_from_line_is_linear` must be provided when `dist_from_line=True`"
+            )
+        if dist_from_line_is_linear and dist_from_line_linear_decay_factor is None:
+            raise HTTPException(
+                status_code=400,
+                detail="`dist_from_line_linear_decay_factor` must be provided when `dist_from_line_is_linear=True`"
+            )
+        if not dist_from_line_is_linear and dist_from_line_exp_decay_factor is None:
+            raise HTTPException(
+                status_code=400,
+                detail="`dist_from_line_exp_decay_factor` must be provided when `dist_from_line_is_linear=False`"
+            )
+
+
+@app.get("/tiles/{z}/{x}/{y}/{dist_from_points}/{dist_from_line}.png")
+def get_tile(z: int, x: int, y: int, dist_from_points: bool, dist_from_line: bool,
+             dist_from_points_is_linear: bool = None, dist_from_points_linear_decay_factor: int = None,
+             dist_from_points_exp_decay_factor: int = None, dist_from_line_is_linear: bool = None,
+             dist_from_line_linear_decay_factor: int = None, dist_from_line_exp_decay_factor: int = None):
+    start = time.perf_counter()
+
+    validate_input(z, x, y, dist_from_points, dist_from_line, dist_from_points_is_linear,
+                   dist_from_points_linear_decay_factor, dist_from_points_exp_decay_factor, dist_from_line_is_linear,
+                   dist_from_line_linear_decay_factor, dist_from_line_exp_decay_factor)
+
+    image = render_tile(z, x, y, dist_from_points, dist_from_line, dist_from_points_is_linear,
+                        dist_from_points_linear_decay_factor, dist_from_points_exp_decay_factor,
+                        dist_from_line_is_linear, dist_from_line_linear_decay_factor, dist_from_line_exp_decay_factor)
     img_io = io.BytesIO()
     image.save(img_io, format="PNG")
     img_io.seek(0)
+
+    duration = time.perf_counter() - start
+    print(f"[TILE] request took {duration:.3f} seconds")
+
     return StreamingResponse(img_io, media_type="image/png")
 
 
