@@ -5,8 +5,11 @@ import type { FC, PropsWithChildren, Dispatch, SetStateAction } from 'react';
 const layerNames = ["border_distance", "settlements_distance", "israeli_polygons", "cross_border_polygons", "strategic_points"] as const;
 export type LayerName = (typeof layerNames)[number]
 
-const optionsNames = ["לינארי", "אקספוננציאלי"] as const
-export type OptionsName = (typeof optionsNames)[number]
+const extraSettingsoptionsNames = ["לינארי", "אקספוננציאלי"] as const
+export type ExtraSettingsOptionsName = (typeof extraSettingsoptionsNames)[number]
+
+const combinationOptionsNames = ["ממוצע משוכלל", "ערך מקסימלי"] as const
+export type CombinationOptionsName = (typeof combinationOptionsNames)[number]
 
 type SharedLayerSettings = {
     isActive: boolean;
@@ -14,13 +17,15 @@ type SharedLayerSettings = {
 };
 
 export type LayerSettings =
-    | (SharedLayerSettings & { selectedOption: typeof optionsNames[0] })
-    | (SharedLayerSettings & { selectedOption: typeof optionsNames[1]; base: number; })
+    | (SharedLayerSettings & { selectedOption: typeof extraSettingsoptionsNames[0] })
+    | (SharedLayerSettings & { selectedOption: typeof extraSettingsoptionsNames[1]; base: number; })
     | (SharedLayerSettings & { selectedOption: null });
 
 export type LayersContextType = [
-    Record<LayerName, LayerSettings>,
-    Dispatch<SetStateAction<Record<LayerName, LayerSettings>>>
+    layers: Record<LayerName, LayerSettings>,
+    setLayers: Dispatch<SetStateAction<Record<LayerName, LayerSettings>>>,
+    combinationOption: CombinationOptionsName,
+    setCombinationOption: Dispatch<SetStateAction<CombinationOptionsName>>,
 ];
 
 export const LayersContext = createContext<LayersContextType | undefined>(undefined);
@@ -28,10 +33,11 @@ export const LayersContext = createContext<LayersContextType | undefined>(undefi
 type LayersProviderProps = PropsWithChildren<{ initialLayers: Record<LayerName, LayerSettings> }>
 
 export const LayersProvider: FC<LayersProviderProps> = ({ children, initialLayers }) => {
-    const [layers, setLayers] = useState<Record<LayerName, LayerSettings>>(initialLayers)
+    const [layers, setLayers] = useState<Record<LayerName, LayerSettings>>(initialLayers);
+    const [combinationOption, setCombinationOption] = useState<CombinationOptionsName>("ממוצע משוכלל");
 
     return (
-        <LayersContext.Provider value={[layers, setLayers]}>
+        <LayersContext.Provider value={[ layers, setLayers, combinationOption, setCombinationOption ]}>
             {children}
         </LayersContext.Provider>
     );
