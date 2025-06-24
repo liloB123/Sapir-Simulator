@@ -1,3 +1,4 @@
+from typing import List
 import os
 import time
 
@@ -101,7 +102,7 @@ def dists_from_line_layer(grid_x, grid_y, dist_from_line_is_linear: bool,
     return values
 
 
-def join_layers(layers: list):
+def join_layers(layers: List[np.ndarray]) -> np.ndarray:
     joined_layer = np.max(layers, axis=0)
     return joined_layer
 
@@ -130,7 +131,11 @@ def render_tile(z: int, x: int, y: int, dist_from_points: bool, dist_from_line: 
                 use_cache: bool = True):
     cache_dir = os.path.join("cache", str(z), str(x), str(y))
     grid_x, grid_y = None, None
-    if not use_cache or not os.path.isfile(os.path.join(cache_dir, "points_dists.npy")) or not os.path.isfile(os.path.join(cache_dir, "line_dists.npy")):
+    cache_files_list = [os.path.join(cache_dir, "points_dists.npy"),
+                        os.path.join(cache_dir, "line_dists.npy"),
+                        os.path.join(cache_dir, "lebanon_mask.npy")]
+
+    if not use_cache or any(not os.path.isfile(f) for f in cache_files_list):
         tile = mercantile.Tile(z=z, x=x, y=y)
         bbox = mercantile.bounds(tile)
         west_utm, south_utm = lnglat_to_meters(bbox.west, bbox.south)
