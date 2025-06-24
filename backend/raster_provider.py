@@ -11,6 +11,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from PIL import Image  # check time improvement with other png image maker packages
 from shapely import LineString, Point, distance
+import json
+from shapely.geometry import shape, box
 
 
 app = FastAPI()
@@ -31,7 +33,7 @@ def dists_from_points_layer(grid_x, grid_y, dist_from_points_is_linear: bool,
     if not use_cache or not os.path.isfile(cache_file_path):
         number_of_source_points = 10
         lons = np.random.uniform(33.75, 39.375, number_of_source_points)
-        lats = np.random.uniform(27.1, 31.9, number_of_source_points)
+        lats = np.random.uniform(32, 37, number_of_source_points)
 
         refs = [lnglat_to_meters(lon, lat) for lon, lat in zip(lons, lats)]
         ref_xs, ref_ys = np.transpose(np.array(refs))
@@ -63,14 +65,16 @@ def dists_from_points_layer(grid_x, grid_y, dist_from_points_is_linear: bool,
     return result
 
 
-# TODO: make it one-sided linestring
 def dists_from_line_layer(grid_x, grid_y, dist_from_line_is_linear: bool,
                           dist_from_line_linear_decay_factor: int = None, dist_from_line_exp_decay_factor: int = None,
                           use_cache: bool = True, cache_dir: str = ""):
     cache_file_path = os.path.join(cache_dir, "line_dists.npy")
     if not use_cache or not os.path.isfile(cache_file_path):
-        source_line = [(35, 28.5), (36, 28), (39, 31)]
-        mercator_line = [lnglat_to_meters(lon, lat) for lon, lat in source_line]
+        with open("geometries/lebanon_israel_border.json") as f:
+            geojson = json.load(f)
+            border_linestring = shape(geojson["features"][0]["geometry"])
+        # source_line = [(35, 28.5), (36, 28), (39, 31)]
+        mercator_line = [lnglat_to_meters(lon, lat) for lon, lat in border_linestring.coords]
         line = LineString(mercator_line)
 
         flat_x = grid_x.ravel()
@@ -110,7 +114,7 @@ def render_tile(z: int, x: int, y: int, dist_from_points: bool, dist_from_line: 
     cache_dir = os.path.join("cache", str(z), str(x), str(y))
     grid_x, grid_y = None, None
     if not use_cache or not os.path.isfile(os.path.join(cache_dir, "points_dists.npy")) or not os.path.isfile(os.path.join(cache_dir, "line_dists.npy")):
-        tile = mercantile.tile(x, y, z)
+        tile = mercantile.Tile(z=z, x=x, y=y)
         bbox = mercantile.bounds(tile)
         west_utm, south_utm = lnglat_to_meters(bbox.west, bbox.south)
         east_utm, north_utm = lnglat_to_meters(bbox.east, bbox.north)
@@ -131,17 +135,16 @@ def render_tile(z: int, x: int, y: int, dist_from_points: bool, dist_from_line: 
 
     joined_layer = join_layers(layers)
 
+    joined_layer = np.flipud(joined_layer)
     rgb_img = colorize_raster(joined_layer)
 
     return Image.fromarray(rgb_img, mode='RGB')
 
 
-def validate_input(z: int, x: int, y: int, dist_from_points: bool, dist_from_line: bool,
+def validate_input(dist_from_points: bool, dist_from_line: bool,
                    dist_from_points_is_linear: bool = None, dist_from_points_linear_decay_factor: int = None,
                    dist_from_points_exp_decay_factor: int = None, dist_from_line_is_linear: bool = None,
                    dist_from_line_linear_decay_factor: int = None, dist_from_line_exp_decay_factor: int = None):
-    # check that x, y, and z is in lebanon area, if not intersecting at all, return black image (?)
-
     if dist_from_points:
         if dist_from_points_is_linear is None:
             raise HTTPException(
@@ -176,6 +179,20 @@ def validate_input(z: int, x: int, y: int, dist_from_points: bool, dist_from_lin
             )
 
 
+def should_render(z: int, x: int, y: int) -> bool:
+    # check that x, y, and z is in lebanon area
+    with open("geometries/lebanon_poly.json") as f:
+        geojson = json.load(f)
+        polygon_geom = shape(geojson["features"][0]["geometry"])
+
+    tile = mercantile.Tile(z=z, x=x, y=y)
+    bbox = mercantile.bounds(tile)
+    print(bbox)
+    tile_poly = box(bbox.west, bbox.south, bbox.east, bbox.north)
+
+    return tile_poly.intersects(polygon_geom)
+
+
 @app.get("/tiles/{z}/{x}/{y}/{dist_from_points}/{dist_from_line}.png")
 def get_tile(z: int, x: int, y: int, dist_from_points: bool, dist_from_line: bool,
              dist_from_points_is_linear: bool = None, dist_from_points_linear_decay_factor: int = None,
@@ -183,13 +200,19 @@ def get_tile(z: int, x: int, y: int, dist_from_points: bool, dist_from_line: boo
              dist_from_line_linear_decay_factor: int = None, dist_from_line_exp_decay_factor: int = None):
     start = time.perf_counter()
 
-    validate_input(z, x, y, dist_from_points, dist_from_line, dist_from_points_is_linear,
+    validate_input(dist_from_points, dist_from_line, dist_from_points_is_linear,
                    dist_from_points_linear_decay_factor, dist_from_points_exp_decay_factor, dist_from_line_is_linear,
                    dist_from_line_linear_decay_factor, dist_from_line_exp_decay_factor)
 
-    image = render_tile(z, x, y, dist_from_points, dist_from_line, dist_from_points_is_linear,
-                        dist_from_points_linear_decay_factor, dist_from_points_exp_decay_factor,
-                        dist_from_line_is_linear, dist_from_line_linear_decay_factor, dist_from_line_exp_decay_factor)
+    if not should_render(z, x, y):
+        print("Not in Lebanon area. Returning black image")
+        image = Image.new("RGB", (256, 256), color=(0, 0, 0))
+    else:
+        image = render_tile(z, x, y, dist_from_points, dist_from_line, dist_from_points_is_linear,
+                            dist_from_points_linear_decay_factor, dist_from_points_exp_decay_factor,
+                            dist_from_line_is_linear, dist_from_line_linear_decay_factor,
+                            dist_from_line_exp_decay_factor)
+
     img_io = io.BytesIO()
     image.save(img_io, format="PNG")
     img_io.seek(0)
