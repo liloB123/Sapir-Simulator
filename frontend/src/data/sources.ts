@@ -90,7 +90,7 @@ export const sourcesAndLayers: SourceWithLayers[] = [
   },
   {
     id: "simulated-heatmap",
-    type: "geojson", // ✅ source is geojson — required
+    type: "geojson",
     data: "/geojson/heatmapPoints.geojson",
     layers: [
       {
@@ -102,14 +102,15 @@ export const sourcesAndLayers: SourceWithLayers[] = [
             ["linear"],
             ["zoom"],
             0, 1,
-            22, 30
+            22, 20
           ],
           "circle-color": [
             "interpolate",
             ["linear"],
             ["get", "value"],
-            1, "rgba(255, 255, 0, 0.4)",   // yellow
-            100, "rgba(255, 0, 0, 0.6)"    // red
+            1, "rgba(9, 255, 0, 0.4)",
+            30, "rgba(255, 255, 0, 0.4)",
+            100, "rgba(255, 0, 0, 0.6)"
           ],
           "circle-blur": 1.5,
           "circle-opacity": 0.7
