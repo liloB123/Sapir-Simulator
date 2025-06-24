@@ -1,3 +1,4 @@
+import os
 import time
 
 from fastapi import FastAPI, HTTPException
@@ -24,21 +25,30 @@ def colorize_raster(raster: np.ndarray):
 
 def dists_from_points_layer(grid_x, grid_y, dist_from_points_is_linear: bool,
                             dist_from_points_linear_decay_factor: int = None,
-                            dist_from_points_exp_decay_factor: int = None):
-    number_of_source_points = 10
-    lons = np.random.uniform(33.75, 39.375, number_of_source_points)
-    lats = np.random.uniform(27.1, 31.9, number_of_source_points)
+                            dist_from_points_exp_decay_factor: int = None,
+                            use_cache: bool = True, cache_dir: str = ""):
+    cache_file_path = os.path.join(cache_dir, "points_dists.npy")
+    if not use_cache or not os.path.isfile(cache_file_path):
+        number_of_source_points = 10
+        lons = np.random.uniform(33.75, 39.375, number_of_source_points)
+        lats = np.random.uniform(27.1, 31.9, number_of_source_points)
 
-    refs = [lnglat_to_meters(lon, lat) for lon, lat in zip(lons, lats)]
-    ref_xs, ref_ys = np.transpose(np.array(refs))
+        refs = [lnglat_to_meters(lon, lat) for lon, lat in zip(lons, lats)]
+        ref_xs, ref_ys = np.transpose(np.array(refs))
 
-    grid_x_exp = np.expand_dims(grid_x, 0)  # (1, 256, 256)
-    grid_y_exp = np.expand_dims(grid_y, 0)  # (1, 256, 256)
+        grid_x_exp = np.expand_dims(grid_x, 0)  # (1, 256, 256)
+        grid_y_exp = np.expand_dims(grid_y, 0)  # (1, 256, 256)
 
-    ref_xs = ref_xs[:, np.newaxis, np.newaxis]  # (number_of_source_points, 1, 1)
-    ref_ys = ref_ys[:, np.newaxis, np.newaxis]  # (number_of_source_points, 1, 1)
+        ref_xs = ref_xs[:, np.newaxis, np.newaxis]  # (number_of_source_points, 1, 1)
+        ref_ys = ref_ys[:, np.newaxis, np.newaxis]  # (number_of_source_points, 1, 1)
 
-    dists = np.sqrt((grid_x_exp - ref_xs) ** 2 + (grid_y_exp - ref_ys) ** 2)
+        dists = np.sqrt((grid_x_exp - ref_xs) ** 2 + (grid_y_exp - ref_ys) ** 2)
+
+        os.makedirs(cache_dir, exist_ok=True)
+        np.save(cache_file_path, dists)
+    else:
+        print("Got points-dists from cache")
+        dists = np.load(cache_file_path)
 
     if dist_from_points_is_linear:
         values = dists / dist_from_points_linear_decay_factor
@@ -55,16 +65,25 @@ def dists_from_points_layer(grid_x, grid_y, dist_from_points_is_linear: bool,
 
 # TODO: make it one-sided linestring
 def dists_from_line_layer(grid_x, grid_y, dist_from_line_is_linear: bool,
-                          dist_from_line_linear_decay_factor: int = None, dist_from_line_exp_decay_factor: int = None):
-    source_line = [(35, 28.5), (36, 28), (39, 31)]
-    mercator_line = [lnglat_to_meters(lon, lat) for lon, lat in source_line]
-    line = LineString(mercator_line)
+                          dist_from_line_linear_decay_factor: int = None, dist_from_line_exp_decay_factor: int = None,
+                          use_cache: bool = True, cache_dir: str = ""):
+    cache_file_path = os.path.join(cache_dir, "line_dists.npy")
+    if not use_cache or not os.path.isfile(cache_file_path):
+        source_line = [(35, 28.5), (36, 28), (39, 31)]
+        mercator_line = [lnglat_to_meters(lon, lat) for lon, lat in source_line]
+        line = LineString(mercator_line)
 
-    flat_x = grid_x.ravel()
-    flat_y = grid_y.ravel()
-    points = np.array([Point(x, y) for x, y in zip(flat_x, flat_y)])
+        flat_x = grid_x.ravel()
+        flat_y = grid_y.ravel()
+        points = np.array([Point(x, y) for x, y in zip(flat_x, flat_y)])
 
-    dists = distance(points, line)
+        dists = distance(points, line)
+
+        os.makedirs(cache_dir, exist_ok=True)
+        np.save(cache_file_path, dists)
+    else:
+        print("Got line-dists from cache")
+        dists = np.load(cache_file_path)
 
     if dist_from_line_is_linear:
         values = dists / dist_from_line_linear_decay_factor
@@ -73,7 +92,7 @@ def dists_from_line_layer(grid_x, grid_y, dist_from_line_is_linear: bool,
     else:
         values = np.exp(-dists / dist_from_line_exp_decay_factor)
 
-    values = values.reshape(grid_x.shape)
+    values = values.reshape((256, 256))
 
     return values
 
@@ -86,24 +105,29 @@ def join_layers(layers: list):
 def render_tile(z: int, x: int, y: int, dist_from_points: bool, dist_from_line: bool,
                 dist_from_points_is_linear: bool = None, dist_from_points_linear_decay_factor: int = None,
                 dist_from_points_exp_decay_factor: int = None, dist_from_line_is_linear: bool = None,
-                dist_from_line_linear_decay_factor: int = None, dist_from_line_exp_decay_factor: int = None):
-    tile = mercantile.tile(x, y, z)
-    bbox = mercantile.bounds(tile)
-    print(bbox)
-    west_utm, south_utm = lnglat_to_meters(bbox.west, bbox.south)
-    east_utm, north_utm = lnglat_to_meters(bbox.east, bbox.north)
+                dist_from_line_linear_decay_factor: int = None, dist_from_line_exp_decay_factor: int = None,
+                use_cache: bool = True):
+    cache_dir = os.path.join("cache", str(z), str(x), str(y))
+    grid_x, grid_y = None, None
+    if not use_cache or not os.path.isfile(os.path.join(cache_dir, "points_dists.npy")) or not os.path.isfile(os.path.join(cache_dir, "line_dists.npy")):
+        tile = mercantile.tile(x, y, z)
+        bbox = mercantile.bounds(tile)
+        west_utm, south_utm = lnglat_to_meters(bbox.west, bbox.south)
+        east_utm, north_utm = lnglat_to_meters(bbox.east, bbox.north)
 
-    xs = np.linspace(west_utm, east_utm, 256)
-    ys = np.linspace(south_utm, north_utm, 256)
-    grid_x, grid_y = np.meshgrid(xs, ys)
+        xs = np.linspace(west_utm, east_utm, 256)
+        ys = np.linspace(south_utm, north_utm, 256)
+        grid_x, grid_y = np.meshgrid(xs, ys)
 
     layers = []
     if dist_from_points:
         layers.append(dists_from_points_layer(grid_x, grid_y, dist_from_points_is_linear,
-                                              dist_from_points_linear_decay_factor, dist_from_points_exp_decay_factor))
+                                              dist_from_points_linear_decay_factor, dist_from_points_exp_decay_factor,
+                                              use_cache, cache_dir))
     if dist_from_line:
         layers.append(dists_from_line_layer(grid_x, grid_y, dist_from_line_is_linear,
-                                            dist_from_line_linear_decay_factor, dist_from_line_exp_decay_factor))
+                                            dist_from_line_linear_decay_factor, dist_from_line_exp_decay_factor,
+                                            use_cache, cache_dir))
 
     joined_layer = join_layers(layers)
 
@@ -117,10 +141,6 @@ def validate_input(z: int, x: int, y: int, dist_from_points: bool, dist_from_lin
                    dist_from_points_exp_decay_factor: int = None, dist_from_line_is_linear: bool = None,
                    dist_from_line_linear_decay_factor: int = None, dist_from_line_exp_decay_factor: int = None):
     # check that x, y, and z is in lebanon area, if not intersecting at all, return black image (?)
-
-    print(x, y, z, dist_from_points, dist_from_line)
-    print(dist_from_points_is_linear, dist_from_points_linear_decay_factor, dist_from_points_exp_decay_factor,
-          dist_from_line_is_linear, dist_from_line_linear_decay_factor, dist_from_line_exp_decay_factor)
 
     if dist_from_points:
         if dist_from_points_is_linear is None:
