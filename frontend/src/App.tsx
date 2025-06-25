@@ -1,6 +1,7 @@
 import type { FC } from 'react';
 import { LayersProvider, type LayerName } from './contexts/LayersMenuContext';
 import MapContainer from './components/map/MapContainer';
+import SimulationsMenu from './components/SimulationsMenu/SimulationsMenu';
 
 const initialLayers: Record<LayerName, boolean> = {
   "border_distance": false,
@@ -13,7 +14,8 @@ const initialLayers: Record<LayerName, boolean> = {
 const App: FC = () => {
   return (
     <LayersProvider initialLayers={initialLayers}>
-      <MapContainer/>
+      {/* <MapContainer/> */}
+      <SimulationsMenu />;
     </LayersProvider>
   );
 };
