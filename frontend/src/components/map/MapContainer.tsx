@@ -9,7 +9,7 @@ const MapContainer: FC = () => {
 
     return (
         <div className="relative w-full h-screen overflow-hidden">
-            <div className="w-full h-full">
+            <div>
                 <BaseMap />
                 <LayerMenuButton isOpen={isMenuOpen} onMenuToggle={() => setIsMenuOpen(prev => !prev)} />
                 <LayersMenu

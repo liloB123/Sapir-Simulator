@@ -16,7 +16,7 @@ const LayersMenu: FC<LayersMenuProps> = ({ isOpen }) => {
   return (
     <>
       <div
-        className="fixed top-5 right-25 z-40 bg-black rounded-lg shadow-lg p-6 w-92 h-[60vh] transform transition-all duration-300 ease-out"
+        className="fixed top-16 right-25 z-40 bg-black rounded-lg shadow-lg p-6 w-92 h-[60vh] transform transition-all duration-300 ease-out"
       >
         <div className="flex flex-col h-full space-y-4">
           <div className="flex justify-between">

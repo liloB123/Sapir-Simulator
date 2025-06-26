@@ -11,7 +11,7 @@ const SimulationsMenu: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen w-full bg-gray-100 p-2 flex justify-center" dir="rtl">
+    <div className=" pt-20 w-full p-2 flex justify-center" dir="rtl">
       <div className="w-full max-w-2xl bg-white p-5 rounded-xl shadow-md">
         <div className="flex justify-between items-center mb-6" dir="rtl">
           <h1 className="!text-xl font-bold text-gray-800">סימולציות אחרונות</h1>

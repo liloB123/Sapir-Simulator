@@ -27,7 +27,7 @@ const BaseMap: FC = () => {
         >
         </Map>
       </div>
-      <div className="fixed top-4 left-4 z-20 bg-white bg-opacity-90 p-4 rounded shadow-md max-w-xs">
+      <div className="fixed top-20 left-4 z-20 bg-white bg-opacity-90 p-4 rounded shadow-md max-w-xs">
         <h4 className="font-semibold mb-2 text-right">:שכבות שנבחרו</h4>
         <div className="text-sm space-y-1 text-right">
           {Object.entries(layers).map(([key, value]) => (
