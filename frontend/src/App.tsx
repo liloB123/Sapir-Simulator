@@ -4,6 +4,7 @@ import MapContainer from './components/map/MapContainer';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from './components/Navbar';
 import SimulationsMenu from './components/SimulationsMenu/SimulationsMenu';
+import SimulationsLayout from './components/SimulationsMenu/SimulationsLayout';
 
 
 const initialLayers: Record<LayerName, boolean> = {
@@ -19,10 +20,12 @@ const App: FC = () => {
     <LayersProvider initialLayers={initialLayers}>
       <Router>
         <Navbar />
-          <Routes>
-            <Route path='/' element={<MapContainer />} />
-            <Route path='/simulations' element={<SimulationsMenu />} />
-          </Routes>
+        <Routes>
+          <Route path='/' element={<MapContainer />} />
+          <Route path="/simulations" element={<SimulationsLayout />}>
+            <Route index element={<SimulationsMenu />} /> 
+          </Route>
+        </Routes>
       </Router>
     </LayersProvider>
   );
