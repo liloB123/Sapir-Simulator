@@ -5,7 +5,7 @@ import type { LayerName } from "../../contexts/LayersMenuContext";
 
 type ExtraSettingsOptionsProps = ExtraSettingOptionsConfig & { name: LayerName }
 
-const ExtraSettingsOptions: FC<ExtraSettingsOptionsProps> = ({ lable, Icon, name }) => {
+const ExtraSettingsOptions: FC<ExtraSettingsOptionsProps> = ({ label, Icon, name }) => {
     const [layers, setLayers] = useLayers()
 
     return (
@@ -14,22 +14,22 @@ const ExtraSettingsOptions: FC<ExtraSettingsOptionsProps> = ({ lable, Icon, name
             <input
                 type="radio"
                 name={`${name}-option`}
-                value={lable}
-                checked={layers[name].selectedOption === lable}
+                value={label}
+                checked={layers[name].selectedOption === label}
                 onChange={() =>
                     setLayers(prev => ({
                         ...prev,
                         [name]: {
                             ...prev[name],
-                            selectedOption: lable
+                            selectedOption: label
                         }
                     }))
                 }
-                className="appearance-none w-3 h-3 border-2 border-cyan-100 rounded-full checked:bg-cyan-500 checked:bg-cyan-500 transition-all duration-200 shadow-sm"
+                className="appearance-none w-3 h-3 border-2 border-cyan-100 rounded-full checked:bg-cyan-500 transition-all duration-200 shadow-sm"
             />
             <div className="flex gap-1 items-center">
                 <Icon />
-                <p className="text-xs">{lable}</p>
+                <p className="text-xs">{label}</p>
             </div>
         </label>
     )

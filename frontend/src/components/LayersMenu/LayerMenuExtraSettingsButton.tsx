@@ -14,7 +14,6 @@ const LayerMenuItemExtraSettingsButton: FC<LayerMenuItemExtraSettingsButtonProps
         <button
             aria-label="Settings"
             type="button"
-            style={{ background: 'transparent', padding: 0, border: 'none' }}
             onClick={() =>
                 setLayers(prev => ({
                     ...prev,
@@ -24,6 +23,7 @@ const LayerMenuItemExtraSettingsButton: FC<LayerMenuItemExtraSettingsButtonProps
                     }
                 }))
             }
+            className="bg-transparent! p-0! border-none!"
         >
             <Settings2 className="text-white w-4 h-4" />
         </button>

@@ -39,11 +39,11 @@ const BarChart3WithStyle: FC = () => <BarChart3 className="w-3 h-3" />
 const TrendingUpWithStyle: FC = () => <TrendingUp className="w-3 h-3" />
 
 export type ExtraSettingOptionsConfig = {
-    lable: OptionsName;
+    label: OptionsName;
     Icon: FC;
 }
 
 export const extraSettingOptions: ExtraSettingOptionsConfig[] = [
-    { lable: "לינארי", Icon: BarChart3WithStyle },
-    { lable: "אקספוננציאלי", Icon: TrendingUpWithStyle }
+    { label: "לינארי", Icon: BarChart3WithStyle },
+    { label: "אקספוננציאלי", Icon: TrendingUpWithStyle }
 ]

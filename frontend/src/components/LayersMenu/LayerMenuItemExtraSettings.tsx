@@ -3,7 +3,7 @@ import type { LayerName } from "../../contexts/LayersMenuContext";
 import ExtraSettingsOptions from "./ExtraSettingsOptions";
 import { extraSettingOptions } from "./consts";
 import { useLayers } from "../../hooks/useLayers";
-import BaseSlider from "./BaseSlider";
+import BaseSlider from "./ExponentialBaseSlider";
 
 type ExtraSettingsProps = {
     name: LayerName;
@@ -17,7 +17,7 @@ const ExtraSettings: FC<ExtraSettingsProps> = ({ name }) => {
             <p className="text-s text-right">אלגוריתם אינטרפולציה</p>
             <div className="flex flex-col sm:flex-row gap-3 justify-evenly">
                 {extraSettingOptions.map((option) => (
-                    <ExtraSettingsOptions key={option.lable} name={name} {...option} />
+                    <ExtraSettingsOptions key={option.label} name={name} {...option} />
                 ))}
             </div>
             {
