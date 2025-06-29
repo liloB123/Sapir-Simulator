@@ -1,27 +1,18 @@
 import type { FC } from "react";
-import { useLayers } from "../../hooks/useLayers";
-import type { LayerMenuItemProps } from "./LayerMenuItem";
 
-type LayerMenuItemToggleProps = Pick<LayerMenuItemProps, "name"> & { isActive: boolean }
+type LayerMenuItemToggleProps = {
+    isToggled: boolean,
+    onToggle: () => void
+}
 
-const LayerMenuItemToggle: FC<LayerMenuItemToggleProps> = ({ name, isActive }) => {
-    const [, setLayers] = useLayers()
-
+const LayerMenuItemToggle: FC<LayerMenuItemToggleProps> = ({ isToggled, onToggle }) => {
     return (
         <label className="inline-flex items-center cursor-pointer">
             <input
                 type="checkbox"
                 className="sr-only peer"
-                onClick={() =>
-                    setLayers(prev => ({
-                        ...prev,
-                        [name]: {
-                            ...prev[name],
-                            isActive: !prev[name].isActive
-                        }
-                    }))
-                }
-                checked={isActive}
+                onClick={onToggle}
+                checked={isToggled}
             />
             <div
                 className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none

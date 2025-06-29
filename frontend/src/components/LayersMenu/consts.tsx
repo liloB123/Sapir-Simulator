@@ -34,9 +34,11 @@ export const layerMenuItems: Record<LayerName, LayerMenuItemDetailsConfig> = {
     strategic_points: { displayName: "נקודות אסטרטגיות", Icon: TargetWithColor, description: "מוקדי חשיבות על הגבול" }
 };
 
-const BarChart3WithStyle: FC = () => <BarChart3 className="w-3 h-3" />
+const extraSettingsIconStyle = "w-3 h-3"
 
-const TrendingUpWithStyle: FC = () => <TrendingUp className="w-3 h-3" />
+const BarChartIcon: FC = () => <BarChart3 className={extraSettingsIconStyle}/>
+
+const TrendingUpIcon: FC = () => <TrendingUp className={extraSettingsIconStyle}/>
 
 export type ExtraSettingOptionsConfig = {
     label: OptionsName;
@@ -44,6 +46,6 @@ export type ExtraSettingOptionsConfig = {
 }
 
 export const extraSettingOptions: ExtraSettingOptionsConfig[] = [
-    { label: "לינארי", Icon: BarChart3WithStyle },
-    { label: "אקספוננציאלי", Icon: TrendingUpWithStyle }
+    { label: "לינארי", Icon: BarChartIcon },
+    { label: "אקספוננציאלי", Icon: TrendingUpIcon }
 ]

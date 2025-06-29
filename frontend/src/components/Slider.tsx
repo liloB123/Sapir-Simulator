@@ -1,16 +1,12 @@
 import type { FC } from "react";
 
-type SliderTicksProps = {
-    min: number;
-    max: number;
-    step: number;
-}
+type SliderTicksProps = Omit<SliderProps, "onChange" | "value">
 
 const SliderTicks: FC<SliderTicksProps> = ({ max, min, step }) => {
     const ticksAmount = Math.floor((max - min) / step) + 1;
 
     return (
-        <div className="absolute top-4.5 left-0 right-0 flex justify-between px-1">
+        <div className="-m-1 top-4.5 left-0 right-0 flex justify-between px-1">
             {Array.from({ length: ticksAmount }, (_, i) => {
                 const tickValue = min + (i * step);
                 const isWhole = tickValue % 1 === 0;
@@ -34,8 +30,6 @@ type SliderProps = {
 };
 
 const Slider: FC<SliderProps> = ({ value, onChange, min, max, step }) => {
-
-
     return (
         <div>
             <div className="flex justify-end gap-3 items-center">
@@ -44,7 +38,7 @@ const Slider: FC<SliderProps> = ({ value, onChange, min, max, step }) => {
             </div>
 
             <div className="space-y-4">
-                <div className="relative">
+                <div>
                     <input
                         type="range"
                         min={min}

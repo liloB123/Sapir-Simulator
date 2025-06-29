@@ -1,28 +1,16 @@
 import { Settings2 } from "lucide-react";
 import type { FC } from "react";
-import { useLayers } from "../../hooks/useLayers";
-import type { LayerName } from "../../contexts/LayersMenuContext";
 
 type LayerMenuItemExtraSettingsButtonProps = {
-    name: LayerName
+    onToggle: ()  => void
 }
 
-const LayerMenuItemExtraSettingsButton: FC<LayerMenuItemExtraSettingsButtonProps> = ({ name }) => {
-    const [, setLayers] = useLayers()
-
+const LayerMenuItemExtraSettingsButton: FC<LayerMenuItemExtraSettingsButtonProps> = ({ onToggle }) => {
     return (
         <button
             aria-label="Settings"
             type="button"
-            onClick={() =>
-                setLayers(prev => ({
-                    ...prev,
-                    [name]: {
-                        ...prev[name],
-                        isExpended: !prev[name].isExpended
-                    }
-                }))
-            }
+            onClick={onToggle}
             className="bg-transparent! p-0! border-none!"
         >
             <Settings2 className="text-white w-4 h-4" />

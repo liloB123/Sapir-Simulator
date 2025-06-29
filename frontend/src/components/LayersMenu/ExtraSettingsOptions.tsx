@@ -13,7 +13,7 @@ const ExtraSettingsOptions: FC<ExtraSettingsOptionsProps> = ({ label, Icon, name
 
             <input
                 type="radio"
-                name={`${name}-option`}
+                name={name + '-option'}
                 value={label}
                 checked={layers[name].selectedOption === label}
                 onChange={() =>

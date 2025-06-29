@@ -36,7 +36,7 @@ const BaseMap: FC = () => {
                 {key} — {value.isActive ? 'ON' : 'OFF'}
               </div>
               <div className="text-blue-600 text-xs">
-                {value.isExpended ? `⚙️ פתוח | נבחר: ${value.selectedOption}` : '⚙️ סגור'}
+                {value.isExpanded ? `⚙️ פתוח | נבחר: ${value.selectedOption}` : '⚙️ סגור'}
               </div>
               <div className="text-blue-600 text-xs">
                 {value.selectedOption === "אקספוננציאלי" && value.base}

@@ -8,15 +8,17 @@ export type LayerName = (typeof layerNames)[number]
 const optionsNames = ["לינארי", "אקספוננציאלי"] as const
 export type OptionsName = (typeof optionsNames)[number]
 
-type SharedLayerSettings = {
+type BaseLayerSettings = {
     isActive: boolean;
-    isExpended: boolean;
+    isExpanded: boolean;
 };
 
-export type LayerSettings =
-    | (SharedLayerSettings & { selectedOption: typeof optionsNames[0] })
-    | (SharedLayerSettings & { selectedOption: typeof optionsNames[1]; base: number; })
-    | (SharedLayerSettings & { selectedOption: null });
+type ExtraSettingsForLayer =
+    | { selectedOption: null }
+    | { selectedOption: typeof optionsNames[0] }
+    | { selectedOption: typeof optionsNames[1]; base: number; };
+
+export type LayerSettings = BaseLayerSettings & ExtraSettingsForLayer;
 
 export type LayersContextType = [
     Record<LayerName, LayerSettings>,
