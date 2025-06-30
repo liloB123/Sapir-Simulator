@@ -1,5 +1,8 @@
 import type { FC } from 'react';
 import { LayersProvider, type LayerName, type LayerSettings } from './contexts/LayersMenuContext';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Navbar from './components/Navbar';
+import SimulationsMenu from './components/SimulationsMenu/SimulationsMenu';
 import MapContainer from './components/MapContainer';
 
 const initialLayers: Record<LayerName, LayerSettings> = {
@@ -13,7 +16,13 @@ const initialLayers: Record<LayerName, LayerSettings> = {
 const App: FC = () => {
   return (
     <LayersProvider initialLayers={initialLayers}>
-      <MapContainer />
+      <Router>
+        <Navbar />
+          <Routes>
+            <Route path='/' element={<MapContainer />} />
+            <Route path='/simulations' element={<SimulationsMenu />} />
+          </Routes>
+      </Router>
     </LayersProvider>
   );
 };

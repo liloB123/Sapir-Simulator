@@ -37,7 +37,7 @@ const LayersMenu: FC<LayersMenuProps> = ({ isOpen }) => {
   return (
     <>
       <div
-        className="fixed top-5 right-25 z-40 bg-black rounded-lg shadow-lg p-6 w-95 h-[95vh] transform transition-all duration-300 ease-out"
+        className="fixed top-14 right-25 z-40 bg-black rounded-lg shadow-lg p-6 w-95 h-[90vh] transform transition-all duration-300 ease-out"
       >
         <div className="flex flex-col h-full gap-4">
           <LayersCombinationSection />
