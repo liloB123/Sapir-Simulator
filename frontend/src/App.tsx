@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from './components/Navbar';
 import SimulationsMenu from './components/SimulationsMenu/SimulationsMenu';
 import SimulationsLayout from './components/SimulationsMenu/SimulationsLayout';
+import SimulationWizard from './components/SimulationsMenu/SimulationsWizard';
 
 
 const initialLayers: Record<LayerName, boolean> = {
@@ -24,6 +25,7 @@ const App: FC = () => {
           <Route path='/' element={<MapContainer />} />
           <Route path="/simulations" element={<SimulationsLayout />}>
             <Route index element={<SimulationsMenu />} /> 
+            <Route path='wizard' element={<SimulationWizard/>} />
           </Route>
         </Routes>
       </Router>
