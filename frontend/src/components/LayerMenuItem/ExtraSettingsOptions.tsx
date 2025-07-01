@@ -1,30 +1,12 @@
-import type { FC } from "react";
+import type { ChangeEventHandler, FC } from "react";
 import { useLayers } from "../../hooks/useLayers";
-import { defaultExponentialBase, type ExtraSettingOptionsConfig } from "../LayersMenu/consts";
-import type { LayerName, LayerSettings } from "../../contexts/LayersMenuContext";
+import { type ExtraSettingOptionsConfig } from "../LayersMenu/consts";
+import type { LayerName } from "../../contexts/LayersMenuContext";
 
-type ExtraSettingsOptionsProps = ExtraSettingOptionsConfig & { name: LayerName }
+type ExtraSettingsOptionsProps = ExtraSettingOptionsConfig & { name: LayerName, onChange: ChangeEventHandler<HTMLInputElement> }
 
-const ExtraSettingsOptions: FC<ExtraSettingsOptionsProps> = ({ label, Icon, name }) => {
-    const [layers, setLayers] = useLayers()
-
-    const hasBase = (layer: LayerSettings): layer is LayerSettings & { base: number } =>
-        "base" in layer;
-
-    const handleChange = () => {
-        setLayers(prev => {
-            const shouldInitBase = label === "אקספוננציאלי" && (!hasBase(prev[name]) || typeof prev[name].base !== "number");
-
-            return {
-                ...prev,
-                [name]: {
-                    ...prev[name],
-                    selectedOption: label,
-                    ...(shouldInitBase ? { base: defaultExponentialBase } : {})
-                }
-            };
-        });
-    }
+const ExtraSettingsOptions: FC<ExtraSettingsOptionsProps> = ({ label, Icon, name, onChange }) => {
+    const [layers,] = useLayers()
 
     return (
         <label className="p-2 border bg-slate-800/30 rounded-lg gap-2 min-w-0 flex flex-1 items-center justify-end border-white/10 hover:border-white/20">
@@ -37,7 +19,7 @@ const ExtraSettingsOptions: FC<ExtraSettingsOptionsProps> = ({ label, Icon, name
                 name={name + '-option'}
                 value={label}
                 checked={layers[name].selectedOption === label}
-                onChange={handleChange}
+                onChange={onChange}
                 className="appearance-none w-3 h-3 border-2 border-cyan-100 rounded-full checked:bg-cyan-500 transition-all duration-200 shadow-sm"
             />
         </label>
