@@ -1,4 +1,4 @@
-import type { FC } from "react";
+import type { FC, InputHTMLAttributes } from "react";
 
 type SliderTicksProps = Pick<SliderProps, "max" | "min" | "step">
 
@@ -21,13 +21,7 @@ const SliderTicks: FC<SliderTicksProps> = ({ max, min, step }) => {
     );
 };
 
-type SliderProps = {
-    value: number;
-    onChange: (value: number) => void;
-    min: number;
-    max: number;
-    step: number;
-};
+type SliderProps = Pick<InputHTMLAttributes<HTMLInputElement>, "onChange" | "value"> & { min: number, max: number, step: number };
 
 const Slider: FC<SliderProps> = ({ value, onChange, min, max, step }) => {
     return (
@@ -45,7 +39,7 @@ const Slider: FC<SliderProps> = ({ value, onChange, min, max, step }) => {
                         max={max}
                         step={step}
                         value={value}
-                        onChange={(e) => onChange(parseFloat(e.target.value))}
+                        onChange={onChange}
                         className="w-full h-2 bg-cyan-100 rounded-lg appearance-none cursor-pointer accent-cyan-500"
                     />
                     <SliderTicks

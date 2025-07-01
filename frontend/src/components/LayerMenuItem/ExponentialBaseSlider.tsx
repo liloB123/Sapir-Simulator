@@ -1,4 +1,4 @@
-import { type FC } from "react";
+import { type ChangeEvent, type FC } from "react";
 import { useLayers } from "../../hooks/useLayers";
 import type { LayerName } from "../../contexts/LayersMenuContext";
 import Slider from "../Slider";
@@ -15,8 +15,10 @@ const ExponentialBaseSlider: FC<ExponentialBaseSliderProps> = ({ name }) => {
   const [layers, setLayers] = useLayers();
 
 
-  const handleBaseChange = (value: number) =>
+  const handleBaseChange = (e: ChangeEvent<HTMLInputElement>) =>
     setLayers(prev => {
+      const value = parseFloat(e.target.value);
+
       return prev[name].selectedOption === "אקספוננציאלי"
         ? {
           ...prev,
