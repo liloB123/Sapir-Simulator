@@ -27,18 +27,14 @@ const ExponentialBaseSlider: FC<ExponentialBaseSliderProps> = ({ name }) => {
         : prev;
     });
 
-  if (layers[name].selectedOption !== "אקספוננציאלי") return null;
-  else {
-    return (
-      <Slider
-        value={layers[name].base}
-        onChange={handleBaseChange}
-        min={rangeMin}
-        max={rangeMax}
-        step={stepSize}
-      />
-    );
-  }
+  return (layers[name].selectedOption !== "אקספוננציאלי") ? null
+    : <Slider
+      value={layers[name].base}
+      onChange={handleBaseChange}
+      min={rangeMin}
+      max={rangeMax}
+      step={stepSize}
+    />
 };
 
 export default ExponentialBaseSlider;
