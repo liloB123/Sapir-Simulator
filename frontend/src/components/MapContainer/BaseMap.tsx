@@ -29,10 +29,19 @@ const BaseMap: FC = () => {
       </div>
       <div className="fixed top-20 left-4 z-20 bg-white bg-opacity-90 p-4 rounded shadow-md max-w-xs">
         <h4 className="font-semibold mb-2 text-right">:שכבות שנבחרו</h4>
-        <div className="text-sm space-y-1 text-right">
+        <div className="text-sm space-y-2 text-right">
           {Object.entries(layers).map(([key, value]) => (
-            <div key={key} className={value ? 'text-green-600' : 'text-red-600'}>
-              {value ? 'ON' : 'OFF'}: {key}
+            <div key={key} className="text-gray-800">
+              <div className={value.isActive ? 'text-green-600' : 'text-red-600'}>
+                {key} — {value.isActive ? 'ON' : 'OFF'}
+              </div>
+              <div className="text-blue-600 text-xs">
+                {value.isExpanded ? `⚙️ פתוח | נבחר: ${value.selectedOption}` : '⚙️ סגור'}
+              </div>
+              <div className="text-blue-600 text-xs">
+                {value.selectedOption === "אקספוננציאלי" && value.base}
+                {value.selectedOption === "אקספוננציאלי" && typeof value.base}
+              </div>
             </div>
           ))}
         </div>

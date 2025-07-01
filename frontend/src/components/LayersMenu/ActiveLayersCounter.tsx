@@ -4,7 +4,7 @@ import { useLayers } from "../../hooks/useLayers";
 const ActiveLayersCounter: FC = () => {
     const [layers,] = useLayers();
 
-    const activeLayersAmount: number = Object.values(layers).filter(Boolean).length
+    const activeLayersAmount: number = Object.values(layers).filter(layer => layer.isActive).length
 
     const layersAmount = Object.entries(layers).length
 

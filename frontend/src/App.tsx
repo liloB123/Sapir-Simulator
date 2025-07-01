@@ -1,19 +1,19 @@
 import type { FC } from 'react';
 import { LayersProvider, type LayerName } from './contexts/LayersMenuContext';
-import MapContainer from './components/map/MapContainer';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from './components/Navbar';
 import SimulationsMenu from './components/SimulationsMenu/SimulationsMenu';
 import SimulationsLayout from './components/SimulationsMenu/SimulationsLayout';
 import SimulationWizard from './components/SimulationsMenu/SimulationsWizard';
+import { type LayerSettings } from './contexts/LayersMenuContext';
+import MapContainer from './components/MapContainer';
 
-
-const initialLayers: Record<LayerName, boolean> = {
-  "border_distance": false,
-  "settlements_distance": false,
-  "israeli_polygons": false,
-  "cross_border_polygons": false,
-  "strategic_points": false
+const initialLayers: Record<LayerName, LayerSettings> = {
+  border_distance: { isActive: false, isExpanded: false, selectedOption: "לינארי" },
+  settlements_distance: { isActive: false, isExpanded: false, selectedOption: "לינארי" },
+  israeli_polygons: { isActive: false, isExpanded: false, selectedOption: "לינארי" },
+  cross_border_polygons: { isActive: false, isExpanded: false, selectedOption: "לינארי" },
+  strategic_points: { isActive: false, isExpanded: false, selectedOption: "לינארי" }
 };
 
 const App: FC = () => {
