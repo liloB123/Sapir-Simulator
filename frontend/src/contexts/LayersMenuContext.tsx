@@ -5,21 +5,23 @@ import type { FC, PropsWithChildren, Dispatch, SetStateAction } from 'react';
 const layerNames = ["border_distance", "settlements_distance", "israeli_polygons", "cross_border_polygons", "strategic_points"] as const;
 export type LayerName = (typeof layerNames)[number]
 
-const extraSettingsoptionsNames = ["לינארי", "אקספוננציאלי"] as const
-export type ExtraSettingsOptionsName = (typeof extraSettingsoptionsNames)[number]
+const optionsNames = ["לינארי", "אקספוננציאלי"] as const
+export type OptionsName = (typeof optionsNames)[number]
 
 const combinationOptionsNames = ["ממוצע משוכלל", "ערך מקסימלי"] as const
 export type CombinationOptionsName = (typeof combinationOptionsNames)[number]
 
-type SharedLayerSettings = {
+type BaseLayerSettings = {
     isActive: boolean;
-    isExpended: boolean;
+    isExpanded: boolean;
 };
 
-export type LayerSettings =
-    | (SharedLayerSettings & { selectedOption: typeof extraSettingsoptionsNames[0] })
-    | (SharedLayerSettings & { selectedOption: typeof extraSettingsoptionsNames[1]; base: number; })
-    | (SharedLayerSettings & { selectedOption: null });
+type ExtraSettingsForLayer =
+    | { selectedOption: null }
+    | { selectedOption: "לינארי" }
+    | { selectedOption: "אקספוננציאלי"; base: number; };
+
+export type LayerSettings = BaseLayerSettings & ExtraSettingsForLayer;
 
 export type LayersContextType = [
     layers: Record<LayerName, LayerSettings>,

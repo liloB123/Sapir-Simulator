@@ -23,24 +23,44 @@ export type LayerMenuItemProps = {
 }
 
 const LayerMenuItem: FC<LayerMenuItemProps> = ({ name }) => {
-  const [layers] = useLayers();
-  const { isActive, isExpended } = layers[name];
+  const [layers, setLayers] = useLayers();
+  const { isActive, isExpanded } = layers[name];
+
+  const onMenuItemToggle = () => {
+    setLayers(prev => ({
+      ...prev,
+      [name]: {
+        ...prev[name],
+        isActive: !prev[name].isActive
+      }
+    }))
+  }
+
+  const onExtraSettingsToggle = () => {
+    setLayers(prev => ({
+      ...prev,
+      [name]: {
+        ...prev[name],
+        isExpanded: !prev[name].isExpanded
+      }
+    }))
+  }
 
   return (
     <div
       className={`p-3 border bg-slate-800/30 rounded-lg flex flex-col gap-2 justify-center min-h-18 ${isActive 
         ? "border-cyan-500 shadow-lg shadow-cyan-500/10"
         : "border-white/10 hover:border-white/20"
-      }`}
+        }`}
     >
       <div className="flex justify-between items-center gap-4">
         <div className="flex items-center gap-4 w-20 justify-between">
-          <LayerMenuItemExtraSettingsButton name={name} />
-          <LayerMenuItemToggle name={name} isActive={isActive} />
+          <LayerMenuItemExtraSettingsButton onToggle={onExtraSettingsToggle} isToggled={isExpanded} />
+          <LayerMenuItemToggle onToggle={onMenuItemToggle} isToggled={isActive} />
         </div>
         <LayerMenuItemDetails {...layerMenuItems[name]} />
       </div>
-      {isExpended && (
+      {isExpanded && (
         <ExtraSettings name={name} />
       )}
     </div>

@@ -13,14 +13,14 @@ const HeatMapSavingButton: FC = () => {
         <>
             <button
                 disabled={hasNoActiveLayers}
-                onClick={() => { setIsModalOpen(true); console.log("clicked") }}
+                onClick={() => { setIsModalOpen(true) }}
                 style={{
                     cursor: hasNoActiveLayers ? 'not-allowed' : 'pointer',
                     background: hasNoActiveLayers ? '#d1d5db' : undefined
                 }}
                 className={`h-[7%] w-full text-lg flex justify-center gap-2 items-center ${hasNoActiveLayers
-                        ? 'text-gray-500'
-                        : 'bg-gradient-to-r from-cyan-400 to-blue-400 hover:from-cyan-500 hover:to-blue-500'
+                    ? 'text-gray-500'
+                    : 'bg-gradient-to-r from-cyan-400 to-blue-400 hover:from-cyan-500 hover:to-blue-500'
                     }`}
             >
                 שמירת מפת החום

@@ -8,7 +8,7 @@ import {
     BarChart3,
     TrendingUp
 } from "lucide-react";
-import type { LayerName, ExtraSettingsOptionsName, CombinationOptionsName } from "../../contexts/LayersMenuContext";
+import type { LayerName, CombinationOptionsName, OptionsName } from "../../contexts/LayersMenuContext";
 
 const ShieldWithColor: FC = () => <Shield className={`w-5 h-5 text-red-400`} />
 
@@ -34,18 +34,20 @@ export const layerMenuItems: Record<LayerName, LayerMenuItemDetailsConfig> = {
     strategic_points: { displayName: "נקודות אסטרטגיות", Icon: TargetWithColor, description: "מוקדי חשיבות על הגבול" }
 };
 
-const BarChart3WithStyle: FC = () => <BarChart3 className="w-3 h-3" />
+const extraSettingsIconStyle = "w-3 h-3"
 
-const TrendingUpWithStyle: FC = () => <TrendingUp className="w-3 h-3" />
+const BarChartIcon: FC = () => <BarChart3 className={extraSettingsIconStyle}/>
+
+const TrendingUpIcon: FC = () => <TrendingUp className={extraSettingsIconStyle}/>
 
 export type ExtraSettingOptionsConfig = {
-    lable: ExtraSettingsOptionsName;
+    label: OptionsName;
     Icon: FC;
 }
 
 export const extraSettingOptions: ExtraSettingOptionsConfig[] = [
-    { lable: "לינארי", Icon: BarChart3WithStyle },
-    { lable: "אקספוננציאלי", Icon: TrendingUpWithStyle }
+    { label: "לינארי", Icon: BarChartIcon },
+    { label: "אקספוננציאלי", Icon: TrendingUpIcon }
 ]
 
 export type LayersCombinationOptionConfig = {
@@ -57,3 +59,5 @@ export const layersCombintaionOptions: LayersCombinationOptionConfig[] = [
     { label: "ממוצע משוכלל", description: "מיזוג חלקי לפי משקלי השכבות" },
     { label: "ערך מקסימלי", description: "שמירה על הערכים הגבוהים ביותר" }
 ]
+
+export const defaultExponentialBase: number = 3
