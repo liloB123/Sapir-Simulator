@@ -7,28 +7,26 @@ const rangeMin = 1;
 const rangeMax = 10;
 const stepSize = 0.5;
 
-type Props = {
+type ExponentialBaseSliderProps = {
   name: LayerName;
 };
 
-const ExponentialBaseSlider: FC<Props> = ({ name }) => {
+const ExponentialBaseSlider: FC<ExponentialBaseSliderProps> = ({ name }) => {
   const [layers, setLayers] = useLayers();
 
 
-  const handleBaseChange = (value: number) => {
-    setLayers((prev) => ({
-      ...prev,
-      [name]: {
-        ...prev[name],
-        base: value,
-      },
-    }));
-  };
+  const handleBaseChange = (value: number) =>
+    setLayers(prev => {
+      return prev[name].selectedOption === "אקספוננציאלי"
+        ? {
+          ...prev,
+          [name]: { ...prev[name], base: value }
+        }
+        : prev;
+    });
 
-  if (layers[name].selectedOption !== "אקספוננציאלי") {
-    return
-  } else {
-
+  if (layers[name].selectedOption !== "אקספוננציאלי") return null;
+  else {
     return (
       <Slider
         value={layers[name].base}

@@ -1,7 +1,7 @@
 import { type FC } from "react";
 import type { LayerName } from "../../contexts/LayersMenuContext";
 import ExtraSettingsOptions from "./ExtraSettingsOptions";
-import { extraSettingOptions } from "./consts";
+import { extraSettingOptions } from "../LayersMenu/consts";
 import { useLayers } from "../../hooks/useLayers";
 import ExponentialBaseSlider from "./ExponentialBaseSlider";
 

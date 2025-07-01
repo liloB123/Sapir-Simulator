@@ -1,6 +1,6 @@
 import type { FC } from "react";
 
-type SliderTicksProps = Omit<SliderProps, "onChange" | "value">
+type SliderTicksProps = Pick<SliderProps, "max" | "min" | "step">
 
 const SliderTicks: FC<SliderTicksProps> = ({ max, min, step }) => {
     const ticksAmount = Math.floor((max - min) / step) + 1;
@@ -13,7 +13,7 @@ const SliderTicks: FC<SliderTicksProps> = ({ max, min, step }) => {
                 return (
                     <div
                         key={i}
-                        className={`${isWhole ? 'w-0.5 h-4 bg-gray-600' : 'w-0.5 h-2 bg-gray-400'}`}
+                        className={isWhole ? 'w-0.5 h-4 bg-gray-600' : 'w-0.5 h-2 bg-gray-400'}
                     />
                 );
             })}

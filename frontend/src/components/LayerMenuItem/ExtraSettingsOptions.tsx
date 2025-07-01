@@ -1,6 +1,6 @@
 import type { FC } from "react";
 import { useLayers } from "../../hooks/useLayers";
-import { defaultExponentialBase, type ExtraSettingOptionsConfig } from "./consts";
+import { defaultExponentialBase, type ExtraSettingOptionsConfig } from "../LayersMenu/consts";
 import type { LayerName, LayerSettings } from "../../contexts/LayersMenuContext";
 
 type ExtraSettingsOptionsProps = ExtraSettingOptionsConfig & { name: LayerName }
