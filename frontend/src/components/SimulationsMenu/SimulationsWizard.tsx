@@ -16,8 +16,9 @@ const SimulationWizard = () => {
     });
 
     return (
-        <div className="p-6 max-w-4xl mx-auto text-right">
+        <div className="p-6 max-w-4xl mx-auto text-right w-[50%]">
             <h1 className="text-2xl font-bold mb-4">סימולציה חדשה</h1>
+            <p>צור סימולציה חדשה על בסיס קובץ משימות</p>
             <div className="flex items-center justify-around mb-6">
                 {["העלאת קובץ", "הגדרה", "הפעלה"].map((title, i) => (
                     <div key={i} className="flex flex-col items-center">

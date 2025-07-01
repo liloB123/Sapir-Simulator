@@ -2,9 +2,9 @@ import { Outlet } from "react-router-dom";
 import SimulationsSidebar from "./SimulationsSidear";
 
 const SimulationsLayout: React.FC = () => (
-  <div className="flex">
+  <div className="">
     <SimulationsSidebar />
-    <div className="flex-1">
+    <div className="w-[600vw]">
       <Outlet />
     </div>
   </div>
