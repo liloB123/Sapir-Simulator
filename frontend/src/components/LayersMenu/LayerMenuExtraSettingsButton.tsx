@@ -2,7 +2,8 @@ import { Settings2 } from "lucide-react";
 import type { FC } from "react";
 
 type LayerMenuItemExtraSettingsButtonProps = {
-    onToggle: ()  => void
+    isToggled: boolean,
+    onToggle: ()  => void,
 }
 
 const LayerMenuItemExtraSettingsButton: FC<LayerMenuItemExtraSettingsButtonProps> = ({ onToggle }) => {

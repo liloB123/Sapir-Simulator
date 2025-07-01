@@ -55,7 +55,7 @@ const LayerMenuItem: FC<LayerMenuItemProps> = ({ name }) => {
     >
       <div className="flex justify-between items-center gap-4">
         <div className="flex items-center gap-4 w-20 justify-between">
-          <LayerMenuItemExtraSettingsButton onToggle={onExtraSettingsToggle} />
+          <LayerMenuItemExtraSettingsButton onToggle={onExtraSettingsToggle} isToggled={isExpanded} />
           <LayerMenuItemToggle onToggle={onMenuItemToggle} isToggled={isActive} />
         </div>
         <LayerMenuItemDetails {...layerMenuItems[name]} />

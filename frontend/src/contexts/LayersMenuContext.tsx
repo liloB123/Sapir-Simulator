@@ -15,8 +15,8 @@ type BaseLayerSettings = {
 
 type ExtraSettingsForLayer =
     | { selectedOption: null }
-    | { selectedOption: typeof optionsNames[0] }
-    | { selectedOption: typeof optionsNames[1]; base: number; };
+    | { selectedOption: "לינארי" }
+    | { selectedOption: "אקספוננציאלי"; base: number; };
 
 export type LayerSettings = BaseLayerSettings & ExtraSettingsForLayer;
 

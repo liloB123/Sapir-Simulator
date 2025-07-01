@@ -49,3 +49,5 @@ export const extraSettingOptions: ExtraSettingOptionsConfig[] = [
     { label: "לינארי", Icon: BarChartIcon },
     { label: "אקספוננציאלי", Icon: TrendingUpIcon }
 ]
+
+export const defaultExponentialBase: number = 3

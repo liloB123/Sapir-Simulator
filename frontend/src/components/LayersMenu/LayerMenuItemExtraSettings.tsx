@@ -3,7 +3,7 @@ import type { LayerName } from "../../contexts/LayersMenuContext";
 import ExtraSettingsOptions from "./ExtraSettingsOptions";
 import { extraSettingOptions } from "./consts";
 import { useLayers } from "../../hooks/useLayers";
-import BaseSlider from "./ExponentialBaseSlider";
+import ExponentialBaseSlider from "./ExponentialBaseSlider";
 
 type ExtraSettingsProps = {
     name: LayerName;
@@ -21,7 +21,7 @@ const ExtraSettings: FC<ExtraSettingsProps> = ({ name }) => {
                 ))}
             </div>
             {
-                layers[name].selectedOption === "אקספוננציאלי" && <BaseSlider name={name}/>
+                layers[name].selectedOption === "אקספוננציאלי" && <ExponentialBaseSlider name={name}/>
             }
         </div>
     );

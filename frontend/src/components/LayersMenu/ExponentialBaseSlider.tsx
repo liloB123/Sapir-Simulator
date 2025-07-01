@@ -1,9 +1,8 @@
-import { useEffect, type FC } from "react";
+import { type FC } from "react";
 import { useLayers } from "../../hooks/useLayers";
 import type { LayerName } from "../../contexts/LayersMenuContext";
 import Slider from "../Slider";
 
-const defaultBase = 3;
 const rangeMin = 1;
 const rangeMax = 10;
 const stepSize = 0.5;
@@ -25,12 +24,6 @@ const ExponentialBaseSlider: FC<Props> = ({ name }) => {
       },
     }));
   };
-
-  useEffect(() => {
-    if (layers[name].selectedOption === "אקספוננציאלי" && typeof layers[name].base !== "number") {
-      handleBaseChange(defaultBase);
-    }
-  });
 
   if (layers[name].selectedOption !== "אקספוננציאלי") {
     return
