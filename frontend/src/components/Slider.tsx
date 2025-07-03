@@ -1,6 +1,6 @@
-import type { FC } from "react";
+import type { FC, InputHTMLAttributes } from "react";
 
-type SliderTicksProps = Omit<SliderProps, "onChange" | "value">
+type SliderTicksProps = Pick<SliderProps, "max" | "min" | "step">
 
 const SliderTicks: FC<SliderTicksProps> = ({ max, min, step }) => {
     const ticksAmount = Math.floor((max - min) / step) + 1;
@@ -13,7 +13,7 @@ const SliderTicks: FC<SliderTicksProps> = ({ max, min, step }) => {
                 return (
                     <div
                         key={i}
-                        className={`${isWhole ? 'w-0.5 h-4 bg-gray-600' : 'w-0.5 h-2 bg-gray-400'}`}
+                        className={isWhole ? 'w-0.5 h-4 bg-gray-600' : 'w-0.5 h-2 bg-gray-400'}
                     />
                 );
             })}
@@ -21,13 +21,7 @@ const SliderTicks: FC<SliderTicksProps> = ({ max, min, step }) => {
     );
 };
 
-type SliderProps = {
-    value: number;
-    onChange: (value: number) => void;
-    min: number;
-    max: number;
-    step: number;
-};
+type SliderProps = Pick<InputHTMLAttributes<HTMLInputElement>, "onChange" | "value"> & { min: number, max: number, step: number };
 
 const Slider: FC<SliderProps> = ({ value, onChange, min, max, step }) => {
     return (
@@ -45,7 +39,7 @@ const Slider: FC<SliderProps> = ({ value, onChange, min, max, step }) => {
                         max={max}
                         step={step}
                         value={value}
-                        onChange={(e) => onChange(parseFloat(e.target.value))}
+                        onChange={onChange}
                         className="w-full h-2 bg-cyan-100 rounded-lg appearance-none cursor-pointer accent-cyan-500"
                     />
                     <SliderTicks

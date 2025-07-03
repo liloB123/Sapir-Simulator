@@ -34,7 +34,7 @@ const SimulationUploadStage: FC<Props> = ({ simulationName, setSimulationName, s
         <p className="text-sm text-gray-500">נתמכים: CSV, Excel (.xlsx, .xls)</p>
         <input type="file" onChange={handleFileChange} className="mx-auto mt-2" />
       </div>
-      <button onClick={onNext} className="bg-blue-500 text-white px-4 py-2 self-start rounded-none">
+      <button onClick={onNext} className="bg-blue-500 text-white px-4 py-2 self-start rounded-xl">
         המשך להגדרה
       </button>
     </div>
