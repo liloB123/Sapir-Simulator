@@ -14,8 +14,6 @@ const SimulationWizardProgressBar: FC<SimulationWizardProgressBarProps> = ({ ste
             const isActive = step === stepNumber;
             const isCompleted = completedSteps[index];
             const shouldBeColored = isActive || isCompleted;
-            console.log(completedSteps.length)
-            console.log(stepNumber)
 
             return (
                 <>

@@ -48,7 +48,7 @@ const LayerMenuItem: FC<LayerMenuItemProps> = ({ name }) => {
 
   return (
     <div
-      className={`p-3 border bg-slate-800/30 rounded-lg flex flex-col gap-2 justify-center min-h-20 ${isActive
+      className={`p-3 border bg-slate-800/30 rounded-lg flex flex-col gap-2 justify-center min-h-18 ${isActive 
         ? "border-cyan-500 shadow-lg shadow-cyan-500/10"
         : "border-white/10 hover:border-white/20"
         }`}

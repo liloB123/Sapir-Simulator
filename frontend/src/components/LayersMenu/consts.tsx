@@ -8,7 +8,7 @@ import {
     BarChart3,
     TrendingUp
 } from "lucide-react";
-import type { LayerName, OptionsName } from "../../contexts/LayersMenuContext";
+import type { LayerName, CombinationOptionsName, OptionsName } from "../../contexts/LayersMenuContext";
 
 const ShieldWithColor: FC = () => <Shield className={`w-5 h-5 text-red-400`} />
 
@@ -47,5 +47,15 @@ export type ExtraSettingOptionsConfig = {
 
 export const LinearExtraSettingOption: ExtraSettingOptionsConfig = { label: "לינארי", Icon: BarChartIcon }
 export const ExponentialSettingOption: ExtraSettingOptionsConfig = { label: "אקספוננציאלי", Icon: TrendingUpIcon }
+
+export type LayersCombinationOptionConfig = {
+    label: CombinationOptionsName;
+    description: string;
+}
+
+export const layersCombintaionOptions: LayersCombinationOptionConfig[] = [
+    { label: "ממוצע משוכלל", description: "מיזוג חלקי לפי משקלי השכבות" },
+    { label: "ערך מקסימלי", description: "שמירה על הערכים הגבוהים ביותר" }
+]
 
 export const defaultExponentialBase: number = 3

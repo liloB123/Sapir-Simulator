@@ -14,7 +14,7 @@ const BaseMap: FC = () => {
     padding: { top: 0, bottom: 0, left: 0, right: 0 },
   });
 
-  const [layers,] = useLayers();
+  const [layers, , combinationMethod] = useLayers();
 
   return (
     <>
@@ -45,6 +45,10 @@ const BaseMap: FC = () => {
             </div>
           ))}
         </div>
+        <h4 className="font-semibold mb-2 text-right pt-2">:שיטת חישוב</h4>
+        <div className="text-right text-sm">
+            {combinationMethod}
+          </div>
       </div>
     </>
   );

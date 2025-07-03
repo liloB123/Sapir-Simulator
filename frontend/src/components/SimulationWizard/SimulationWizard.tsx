@@ -35,7 +35,6 @@ const SimulationWizard = () => {
     };
 
     const handleCircleClick = (clickedStep: number) => {
-        console.log(clickedStep)
         if (clickedStep == step) return
 
         if (clickedStep < step) {
