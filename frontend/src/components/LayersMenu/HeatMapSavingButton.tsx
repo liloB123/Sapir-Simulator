@@ -18,7 +18,7 @@ const HeatMapSavingButton: FC = () => {
                     cursor: hasNoActiveLayers ? 'not-allowed' : 'pointer',
                     background: hasNoActiveLayers ? '#d1d5db' : undefined
                 }}
-                className={`h-[7%] w-full text-lg flex justify-center gap-2 items-center ${hasNoActiveLayers
+                className={`h-[7%] w-full text-lg flex justify-center gap-2 items-center rounded-2xl ${hasNoActiveLayers
                     ? 'text-gray-500'
                     : 'bg-gradient-to-r from-cyan-400 to-blue-400 hover:from-cyan-500 hover:to-blue-500'
                     }`}

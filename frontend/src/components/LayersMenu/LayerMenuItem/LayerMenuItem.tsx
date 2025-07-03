@@ -1,8 +1,8 @@
 import { type FC } from 'react';
-import { useLayers } from "../../hooks/useLayers";
+import { useLayers } from "../../../hooks/useLayers";
 import LayerMenuItemToggle from './LayerMenuItemToggle';
-import type { LayerName } from '../../contexts/LayersMenuContext';
-import { layerMenuItems, type LayerMenuItemDetailsConfig } from './consts';
+import type { LayerName } from '../../../contexts/LayersMenuContext';
+import { layerMenuItems, type LayerMenuItemDetailsConfig } from '../consts';
 import ExtraSettings from './LayerMenuItemExtraSettings';
 import LayerMenuItemExtraSettingsButton from './LayerMenuExtraSettingsButton';
 
