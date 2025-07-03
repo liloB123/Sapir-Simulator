@@ -1,7 +1,7 @@
 import type { ChangeEventHandler, FC } from "react";
-import { useLayers } from "../../hooks/useLayers";
-import { type ExtraSettingOptionsConfig } from "../LayersMenu/consts";
-import type { LayerName } from "../../contexts/LayersMenuContext";
+import { useLayers } from "../../../hooks/useLayers";
+import { type ExtraSettingOptionsConfig } from "../consts";
+import type { LayerName } from "../../../contexts/LayersMenuContext";
 
 type ExtraSettingsOptionsProps = ExtraSettingOptionsConfig & { name: LayerName, onChange: ChangeEventHandler<HTMLInputElement> }
 
