@@ -10,7 +10,7 @@ const SimulationWizard = () => {
     const [step, setStep] = useState(1);
     const [completedSteps, setCompletedSteps] = useState<boolean[]>(Array(TOTAL_STEPS).fill(false));
     const [simulationName, setSimulationName] = useState("");
-    const [, setFile] = useState<File | null>(null);
+    const [file, setFile] = useState<File | null>(null);
     const [settings, setSettings] = useState({
         mapType: "",
         timeStep: 5,
@@ -61,6 +61,7 @@ const SimulationWizard = () => {
                     setSimulationName={setSimulationName}
                     setFile={setFile}
                     onNext={handleNext}
+                    file={file}
                 />
             )}
 

@@ -1,7 +1,11 @@
-import { useCallback } from "react";
+import { useCallback, type Dispatch, type FC, type SetStateAction } from "react";
 import { useDropzone } from "react-dropzone";
 
-const FileDropzone = ({ setFile }: { setFile: (file: File | null) => void }) => {
+type FileDropZoneProps = {
+    setFile: Dispatch<SetStateAction<File | null>>
+}
+
+const FileDropzone: FC<FileDropZoneProps> = ({ setFile }) => {
     const onDrop = useCallback((acceptedFiles: File[]) => {
         const file = acceptedFiles[0];
         if (file) {

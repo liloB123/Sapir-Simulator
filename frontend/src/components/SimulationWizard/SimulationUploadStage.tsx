@@ -1,15 +1,17 @@
-import type { FC } from "react";
+import { type Dispatch, type FC, type SetStateAction } from "react";
 import FileDropzone from "./FileDropZone";
 
 
-type Props = {
+type SimulationUploadStageProps = {
   simulationName: string;
   setSimulationName: (val: string) => void;
-  setFile: (file: File | null) => void;
+  file: File | null
+  setFile: Dispatch<SetStateAction<File | null>>
   onNext: () => void;
 };
 
-const SimulationUploadStage: FC<Props> = ({ simulationName, setSimulationName, setFile, onNext }) => {
+const SimulationUploadStage: FC<SimulationUploadStageProps> = ({ file, simulationName, setSimulationName, setFile, onNext }) => {
+
   return (
     <div className="bg-white rounded-lg shadow p-4 space-y-4">
       <div className="flex flex-col gap-1">
@@ -25,8 +27,14 @@ const SimulationUploadStage: FC<Props> = ({ simulationName, setSimulationName, s
         className="border rounded px-2 py-2 w-full border-gray-400"
       />
       <FileDropzone
-      setFile={setFile}/>
-      <button onClick={onNext} className="bg-blue-500 text-white px-4 py-2 self-start rounded-xl">
+        setFile={setFile} />
+      <button onClick={onNext}
+        style={{
+          cursor: !file ? 'not-allowed' : 'pointer',
+          background: !file ? '#d1d5db' : undefined
+        }} 
+        disabled={!file} 
+        className="bg-blue-500 text-white px-4 py-2 self-start rounded-xl">
         המשך להגדרה
       </button>
     </div>
