@@ -4,9 +4,11 @@ import {
     Building2,
     Shield,
     Navigation,
-    Target
+    Target,
+    BarChart3,
+    TrendingUp
 } from "lucide-react";
-import type { LayerName } from "../../contexts/LayersMenuContext";
+import type { LayerName, OptionsName } from "../../contexts/LayersMenuContext";
 
 const ShieldWithColor: FC = () => <Shield className={`w-5 h-5 text-red-400`} />
 
@@ -31,3 +33,19 @@ export const layerMenuItems: Record<LayerName, LayerMenuItemDetailsConfig> = {
     cross_border_polygons: { displayName: "פוליגונים חוצי גבולות", Icon: NavigationWithColor, description: "פעילות בסוריה ולבנון" },
     strategic_points: { displayName: "נקודות אסטרטגיות", Icon: TargetWithColor, description: "מוקדי חשיבות על הגבול" }
 };
+
+const extraSettingsIconStyle = "w-3 h-3"
+
+const BarChartIcon: FC = () => <BarChart3 className={extraSettingsIconStyle}/>
+
+const TrendingUpIcon: FC = () => <TrendingUp className={extraSettingsIconStyle}/>
+
+export type ExtraSettingOptionsConfig = {
+    label: OptionsName;
+    Icon: FC;
+}
+
+export const LinearExtraSettingOption: ExtraSettingOptionsConfig = { label: "לינארי", Icon: BarChartIcon }
+export const ExponentialSettingOption: ExtraSettingOptionsConfig = { label: "אקספוננציאלי", Icon: TrendingUpIcon }
+
+export const defaultExponentialBase: number = 3

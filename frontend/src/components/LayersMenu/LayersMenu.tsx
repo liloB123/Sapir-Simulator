@@ -1,5 +1,5 @@
-import type { FC } from 'react';
-import LayerMenuItem from "./LayerMenuItem"
+import { type FC } from 'react';
+import LayerMenuItem from "./LayerMenuItem/LayerMenuItem"
 import ActiveLayersCounter from "./ActiveLayersCounter";
 import { useLayers } from '../../hooks/useLayers';
 import type { LayerName } from '../../contexts/LayersMenuContext';
@@ -21,7 +21,7 @@ const LayersMenu: FC<LayersMenuProps> = ({ isOpen }) => {
         <div className="flex flex-col h-full space-y-4">
           <div className="flex justify-between">
             <ActiveLayersCounter />
-            <h2 className="text-lg font-bold text-white mb-4 self text-right">שכבות גאורפיות</h2>
+            <h2 className="text-lg font-bold text-white mb-4 self text-right">שכבות גאוגרפיות</h2>
           </div>
           <div className="overflow-y-auto space-y-4 pr-1 flex-1">
             {(Object.keys(layers) as LayerName[]).map((layer) => (
