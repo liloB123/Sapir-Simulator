@@ -1,7 +1,7 @@
 import { type ChangeEvent, type FC } from "react";
-import { useLayers } from "../../hooks/useLayers";
-import type { LayerName } from "../../contexts/LayersMenuContext";
-import Slider from "../Slider";
+import { useLayers } from "../../../hooks/useLayers";
+import type { LayerName } from "../../../contexts/LayersMenuContext";
+import Slider from "../../Slider";
 
 const rangeMin = 1;
 const rangeMax = 10;

@@ -1,8 +1,8 @@
 import { type FC } from "react";
-import type { LayerName } from "../../contexts/LayersMenuContext";
+import type { LayerName } from "../../../contexts/LayersMenuContext";
 import ExtraSettingsOptions from "./ExtraSettingsOptions";
-import { defaultExponentialBase, extraSettingOptions } from "../LayersMenu/consts";
-import { useLayers } from "../../hooks/useLayers";
+import { defaultExponentialBase, ExponentialSettingOption, LinearExtraSettingOption } from "../consts";
+import { useLayers } from "../../../hooks/useLayers";
 import ExponentialBaseSlider from "./ExponentialBaseSlider";
 
 type ExtraSettingsProps = {
@@ -38,13 +38,13 @@ const ExtraSettings: FC<ExtraSettingsProps> = ({ name }) => {
                 <ExtraSettingsOptions
                     name={name}
                     label="לינארי"
-                    Icon={extraSettingOptions.find(option => option.label === "לינארי")!.Icon}
+                    Icon={LinearExtraSettingOption.Icon}
                     onChange={selectLinear}
                 />
                 <ExtraSettingsOptions
                     name={name}
                     label="אקספוננציאלי"
-                    Icon={extraSettingOptions.find(option => option.label === "אקספוננציאלי")!.Icon}
+                    Icon={ExponentialSettingOption.Icon}
                     onChange={selectExponential}
                 />
             </div>
