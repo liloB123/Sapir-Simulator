@@ -1,9 +1,8 @@
-// SimulationsSidebar.tsx
 import { NavLink } from 'react-router-dom';
 
 const SimulationsSidebar = () => {
   return (
-    <div className="fixed right-0 top-12 w-40 px-3 py-4 flex flex-col gap-4 text-sm text-right bg-gray-100 h-full">
+    <div className="fixed right-0 top-12 w-40 px-3 py-4 flex flex-col gap-4 text-sm text-right bg-gray-50 h-full">
       <NavLink
         to="/simulations"
         end
