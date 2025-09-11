@@ -13,8 +13,17 @@ const FileDropzone: FC<FileDropZoneProps> = ({ setFile }) => {
         }
     }, [setFile]);
 
+    const onDropRejected = useCallback(() => {
+        // Clear the file when an invalid file is dropped
+        setFile(null);
+    }, [setFile]);
+
     const { getRootProps, getInputProps, isDragActive, fileRejections, acceptedFiles } = useDropzone({
         onDrop,
+        onDropRejected,
+        onFileDialogCancel: () => {
+            setFile(null); // Clear the file if the user cancels file dialog
+        },
         accept: {
             "text/csv": [".csv"],
             "application/vnd.ms-excel": [".xls"],
@@ -22,7 +31,6 @@ const FileDropzone: FC<FileDropZoneProps> = ({ setFile }) => {
         },
         multiple: false,
     });
-
     return (
         <div
             {...getRootProps()}
